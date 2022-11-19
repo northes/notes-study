@@ -50,3 +50,10 @@ flux create hr apihut-docs \
 --namespace=default  
 #--chart-version=">4.0.0"  
 ```
+
+## 命令
+
+```shell
+flux get source chart -w
+
+```
