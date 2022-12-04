@@ -48,3 +48,4 @@ https://kubernetes.io/docs/tutorials/services/source-ip/#source-ip-for-services-
 
 https://kubernetes.github.io/ingress-nginx/deploy/#cloud-deployments
 
+https://stackoverflow.com/questions/70356717/nginx-ingress-controllers-load-balancer-is-hiding-the-real-client-ip
