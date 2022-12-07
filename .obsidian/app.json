@@ -1,0 +1,10 @@
+{
+  "showLineNumber": true,
+  "livePreview": false,
+  "showFrontmatter": true,
+  "trashOption": "local",
+  "newFileLocation": "current",
+  "useMarkdownLinks": true,
+  "attachmentFolderPath": "./",
+  "alwaysUpdateLinks": true
+}

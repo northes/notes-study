@@ -1,0 +1,144 @@
+{
+  "main": {
+    "id": "77b8cd7239617b15",
+    "type": "split",
+    "children": [
+      {
+        "id": "1406f112610dcc01",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "cf839cdb62ca9277",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ce85f3de45d15ddb",
+    "type": "split",
+    "children": [
+      {
+        "id": "3786d082b88b0795",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "938469c02dd4ab14",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "56c81043e1223c14",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "04237",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "68ccb2991f9bd362",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "298db6a044c29c2b",
+    "type": "split",
+    "children": [
+      {
+        "id": "468f22f259b6f87b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "635a92614d79c0ff",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "15397fd1c0f35d56",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "9e9831c664ed6b28",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "4580410e51ad7fd7",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ],
+        "currentTab": 3
+      }
+    ],
+    "direction": "horizontal",
+    "width": 248.5
+  },
+  "active": "938469c02dd4ab14",
+  "lastOpenFiles": [
+    "代码片段/Cloudflare/IP 定位.md",
+    "代码片段/CICD/FluxCD.md",
+    "开发/通用开发环境.md",
+    "家庭工作站/家用服务器.md",
+    "家庭工作站/NAS/NAS.md",
+    "家庭工作站/NAS/群辉.md",
+    "家庭工作站/内网穿透.md",
+    "代码片段/青龙/B站.md",
+    "代码片段/青龙/京东.md",
+    "工作-公司/良风网络科技/工作日志&备忘/2022-11-30.md"
+  ]
+}
