@@ -1,3 +1,6 @@
+> [!Tips]
+> 自带的 traefik 未测试，目前使用的是 nginx ingress controller
+
 ## Nginx Ingress Controller
 
 ### 部署
@@ -11,7 +14,7 @@ helm upgrade --install ingress-nginx ingress-nginx --repo https://kubernetes.git
 > 如果是已经安装的情况下，需要重启所有 nginx 相关的 pod (简单粗暴直接删除即可，由 Daemon Set 、Deployment 重新拉起即可)
 > ❗ 修改完后一定要重启 pod
 
-
+/back
 ### 配置文件
 
 ⚡ 配置文件不需要作任何修改，记录下来仅作为当时尝试过的记录（踩过的坑）
@@ -28,6 +31,15 @@ data:
   compute-full-forwarded-for: 'true'  
   use-forwarded-headers: 'true'  
   enable-real-ip: 'true'
+```
+
+
+### ingress.yaml
+
+需要加上 ingressClass
+
+```yaml
+
 ```
 
 
