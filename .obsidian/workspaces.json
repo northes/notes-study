@@ -1,0 +1,178 @@
+{
+  "note_workspace": {
+    "main": {
+      "id": "105b6742ddfb5ebb",
+      "type": "split",
+      "children": [
+        {
+          "id": "ea40649bbe7dc70b",
+          "type": "tabs",
+          "children": [
+            {
+              "id": "35bbac557b83879b",
+              "type": "leaf",
+              "state": {
+                "type": "markdown",
+                "state": {
+                  "file": "工作/良风网络科技/项目.md",
+                  "mode": "source",
+                  "source": true
+                }
+              },
+              "group": "928a147999402802"
+            }
+          ]
+        },
+        {
+          "id": "2531706edd2e5be7",
+          "type": "tabs",
+          "children": [
+            {
+              "id": "1ca88de81e2d4823",
+              "type": "leaf",
+              "state": {
+                "type": "markdown",
+                "state": {
+                  "file": "工作/良风网络科技/项目.md",
+                  "mode": "preview",
+                  "source": true
+                }
+              },
+              "group": "928a147999402802"
+            }
+          ]
+        }
+      ],
+      "direction": "vertical"
+    },
+    "left": {
+      "id": "61c2a56486e0d738",
+      "type": "split",
+      "children": [
+        {
+          "id": "9858f985275542bc",
+          "type": "tabs",
+          "children": [
+            {
+              "id": "dcfa9c235dd382e9",
+              "type": "leaf",
+              "state": {
+                "type": "file-explorer",
+                "state": {
+                  "sortOrder": "alphabetical"
+                }
+              }
+            },
+            {
+              "id": "440bb46d3c96927f",
+              "type": "leaf",
+              "state": {
+                "type": "search",
+                "state": {
+                  "query": "加速",
+                  "matchingCase": false,
+                  "explainSearch": false,
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical"
+                }
+              }
+            },
+            {
+              "id": "cb1ebf03cfece475",
+              "type": "leaf",
+              "state": {
+                "type": "starred",
+                "state": {}
+              }
+            },
+            {
+              "id": "91f15c4bdd6f63d4",
+              "type": "leaf",
+              "state": {
+                "type": "outline",
+                "state": {
+                  "file": "工作/良风网络科技/项目.md"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "direction": "horizontal",
+      "width": 300
+    },
+    "right": {
+      "id": "85826ab48aa4cd5b",
+      "type": "split",
+      "children": [
+        {
+          "id": "13c85116dd774583",
+          "type": "tabs",
+          "children": [
+            {
+              "id": "a54d8ff50fcaf26f",
+              "type": "leaf",
+              "state": {
+                "type": "backlink",
+                "state": {
+                  "file": "工作/良风网络科技/项目.md",
+                  "collapseAll": false,
+                  "extraContext": false,
+                  "sortOrder": "alphabetical",
+                  "showSearch": false,
+                  "searchQuery": "",
+                  "backlinkCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              }
+            },
+            {
+              "id": "60e3d4b45b37ad27",
+              "type": "leaf",
+              "state": {
+                "type": "outgoing-link",
+                "state": {
+                  "file": "工作/良风网络科技/项目.md",
+                  "linksCollapsed": false,
+                  "unlinkedCollapsed": true
+                }
+              }
+            },
+            {
+              "id": "7e53e23124ba2966",
+              "type": "leaf",
+              "state": {
+                "type": "tag",
+                "state": {
+                  "sortOrder": "frequency",
+                  "useHierarchy": true
+                }
+              }
+            },
+            {
+              "id": "341e88cbafce2753",
+              "type": "leaf",
+              "state": {
+                "type": "git-view",
+                "state": {}
+              }
+            },
+            {
+              "id": "cc19916496abb308",
+              "type": "leaf",
+              "state": {
+                "type": "advanced-tables-toolbar",
+                "state": {}
+              }
+            }
+          ],
+          "currentTab": 2
+        }
+      ],
+      "direction": "horizontal",
+      "width": 300
+    },
+    "active": "dcfa9c235dd382e9"
+  }
+}
