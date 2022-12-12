@@ -32,7 +32,7 @@ sudo service ssh start
 
 ### 配置文件
 
-/etc/ssh/sshd_config
+`/etc/ssh/sshd_config`
 
 ### 允许 root 用户以任何方式登录
 
