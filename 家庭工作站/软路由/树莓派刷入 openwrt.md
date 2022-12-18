@@ -4,6 +4,8 @@
 
 https://doc.openwrt.cc/2-OpenWrt-Rpi/
 
+https://openwrt.cc/releases/targets/bcm27xx/bcm2711/
+
 ### 官方固件
 
 https://firmware-selector.openwrt.org/?version=22.03.2&target=bcm27xx%2Fbcm2711&id=rpi-4
@@ -24,12 +26,12 @@ openwrt 默认地址为 192.168.1.1
 
 > 默认账号密码
 > root
-> password
+> password （或空）
 
 通过 ssh 修改静态ip
 
 ```shell
-uci set network.lan.ipaddr=192.168.31.5
+uci set network.lan.ipaddr=192.168.31.2
 uci commit network  
 /etc/init.d/network restart
 ```
@@ -54,7 +56,7 @@ uci commit network
 网络 > 接口 > 找到对应的Lan口进行编辑
 
 - 协议：静态地址
-- IPV4地址：192.168.31.5 （保持不变）
+- IPV4地址：192.168.31.2 （保持不变）
 - 网关：填写上级路由IP，如 192.168.31.1
 - 广播：将上级路由网段的最后一段改为 255，如192.168.31.255
 - DNS地址：192.168.31.1（或者其他）
