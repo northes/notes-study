@@ -4,4 +4,3 @@
 ```
 chmod 400 ~/.ssh/id_rsa
 ```
-/ba
