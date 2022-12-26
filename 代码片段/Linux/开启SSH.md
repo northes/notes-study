@@ -8,6 +8,7 @@ ssh 分为 client 和 server，首先检查是否安装并开启了 ssh server
 dpkg -l|grep ssh
 # 安装server
 apt-get install openssh-server
+yum install openssh-server
 # 安装client，如需
 apt-get install openssh-client
 ```
