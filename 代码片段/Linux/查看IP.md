@@ -1,0 +1,5 @@
+
+```shell
+ifconfig
+ip addr
+```
