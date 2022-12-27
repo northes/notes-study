@@ -23,4 +23,3 @@ systemctl restart network
 ```shell
 ip addr
 ```
-/
