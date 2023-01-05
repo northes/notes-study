@@ -33,6 +33,7 @@ fi
 mount --make-rshared /
 ```
 
+
 授权并重启
 
 ```shell
