@@ -49,3 +49,7 @@ curl -sfL https://get.k3s.io | sh -
 # 国内
 curl -sfL https://rancher-mirror.rancher.cn/k3s/k3s-install.sh | INSTALL_K3S_MIRROR=cn sh -
 ```
+
+## 参考
+
+- [Site Unreachable](https://gist.github.com/triangletodd/02f595cd4c0dc9aac5f7763ca2264185)
