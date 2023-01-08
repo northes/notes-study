@@ -5,6 +5,7 @@
 
 ### TrueNAS Scale
 
+- 文档：[Docs Hub | Getting Started with SCALE](https://www.truenas.com/docs/scale/gettingstarted/)
 
 ### TrueNAS Core (FreeNAS)
 
