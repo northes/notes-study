@@ -1,6 +1,8 @@
 > [!Tips]
 > 自带的 traefik 未测试，目前使用的是 nginx ingress controller
 
+由于自带 load-balance 组件的影响，传递到 ingress 的通常是集群内部地址
+
 ## Nginx Ingress Controller
 
 ### 部署
