@@ -41,7 +41,12 @@ data:
 需要加上 ingressClass
 
 ```yaml
-
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+...
+spec:
+  ingressClassName: nginx
+  ...
 ```
 
 
