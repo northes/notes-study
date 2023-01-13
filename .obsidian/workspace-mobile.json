@@ -1,0 +1,129 @@
+{
+  "main": {
+    "id": "4a1aec4fff247230",
+    "type": "split",
+    "children": [
+      {
+        "id": "e0124dfbd9e4ab9c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "3c95476b219edb3f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "测试/笔记1.md",
+                "mode": "source",
+                "backlinks": false,
+                "source": true
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "ae6baae4d2c0614a",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "961afbccaffb8cd0",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical"
+          }
+        }
+      },
+      {
+        "id": "8a08b865cbd02be6",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          }
+        }
+      },
+      {
+        "id": "6fc46650e2a785d3",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true
+          }
+        }
+      },
+      {
+        "id": "3886d585c5dd7c64",
+        "type": "leaf",
+        "state": {
+          "type": "starred",
+          "state": {}
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "87f048343e6e0b30",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "0ca79963b7345787",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "测试/笔记1.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          }
+        }
+      },
+      {
+        "id": "2b1a713397c26ddf",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "测试/笔记1.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          }
+        }
+      },
+      {
+        "id": "a32b0f90ae8ce70c",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "测试/笔记1.md"
+          }
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "active": "3c95476b219edb3f",
+  "lastOpenFiles": [
+    "开发/镜像加速.md"
+  ]
+}
