@@ -1,1 +1,68 @@
 
+## 项目地址
+
+[GitHub - Dreamacro/clash: A rule-based tunnel in Go.](https://github.com/Dreamacro/clash)
+
+## 下载安装
+
+```shell
+wget https://github.com/Dreamacro/clash/releases/download/v1.10.0/clash-linux-amd64-v1.12.0.gz
+
+gunzip clash-linux-amd64-v1.12.0.gz
+mv clash-linux-amd64-v1.12.0 /usr/local/bin/clash
+chmod +x /usr/local/bin/clash
+```
+
+## 运行
+
+```shell
+clash
+```
+
+首次启动会在 `~/.config/clash` 下创建配置文件
+
+## 配置文件
+
+将在机场下载的 Clash 配置文件替换到 `~/.config/clash/config.yaml` 即可，重启 `clash`
+
+### Contry.mmdb
+
+首次启动会联网自动下载，网路问题导致下载失败的可以手动下载放入 `~/.config/clash`
+
+[Releases · Dreamacro/maxmind-geoip](https://github.com/Dreamacro/maxmind-geoip/releases)
+
+### 参考
+
+```yaml
+mixed-port: 7890
+allow-lan: true
+bind-address: '*'
+mode: rule
+log-level: info
+external-controller: '127.0.0.1:9090' # 远程管理端口
+secret: 'xxx' # 远程管理密钥
+```
+
+## 自启，常驻
+
+```shell
+vi /etc/systemd/system/clash.service
+```
+
+```
+[Unit]
+Description=Clash Daemon
+
+[Service]
+ExecStart=/usr/local/bin/clash -d /root/.config/clash
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```shell
+systemctl enable clash.service
+systemctl start clash
+ps -e  | grep clash
+```
