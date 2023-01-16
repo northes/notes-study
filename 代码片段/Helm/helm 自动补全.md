@@ -7,7 +7,7 @@ apt-get install bash-completion
 ```
 source /usr/share/bash-completion/bash_completion
 
-alias k='kubectl'
-source <(kubectl completion bash)
-complete -F __start_kubectl k
+alias h='helm'
+source <(helm completion bash)
+complete -F __start_helm h
 ```
