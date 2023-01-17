@@ -7,6 +7,12 @@ Finder 显示隐藏文件
 右键文件-显示简介-修改“打开方式”-全部更改
 
 
+切换输入法
+Control + 空格
+
+最小化
+Commond + M
+
 vscode
 上一个位置：Ctrl + -
 命令面板：Commond + Shift + P
