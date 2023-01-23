@@ -2,6 +2,8 @@
 ### Unraid
 
 - 只能U盘启动
+- 付费
+- 免费体验30天
 
 ### TrueNAS Scale
 
