@@ -1,3 +1,5 @@
+## 部署
+
 ```
 docker run -d \
   --name=qbittorrent \
@@ -14,5 +16,17 @@ docker run -d \
   linuxserver/qbittorrent:latest
 ```
 
+## 账号
 
 默认账号 `admin` 密码 `adminadmin`
+
+## 设置
+
+### 连接
+
+- 监听端口：随机
+- 勾选使用映射自路由的 UPnP ...
+
+### BitTorrent
+
+- 加密模式：强制加密
