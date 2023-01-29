@@ -26,3 +26,12 @@ jellyfin/jellyfin:latest
 ```
 nyanmisaka/jellyfin:latest
 ```
+
+## 添加代理
+
+添加环境变量
+
+```
+http_proxy=http://192.168.31.40:7890
+https_proxy=http://192.168.31.40:7890
+```
