@@ -1,6 +1,6 @@
 ## CI
 - Drone CI
-- Jenkins
+- Jenkins  [Jenkins](https://www.jenkins.io/zh/)
 - Travis CI
 - Circle CI
 - Team CIity
