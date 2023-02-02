@@ -17,3 +17,13 @@ systemctl restart docker
 ```bash
 curl -XGET http://localhost:2375/version
 ```
+
+使用远程守护进程
+
+```bash
+docker -H tcp://192.168.0.83:2376 info
+```
+
+```
+export DOCKER_HOST="tcp://192.168.0.83:2376"
+```
