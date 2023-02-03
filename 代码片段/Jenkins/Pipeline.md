@@ -1,12 +1,15 @@
 ## 使用 Docker
 
-[镜像构建方式](../../开发/技术选型/容器.md#镜像构建方式)
+```groovy
+agent {
+    docker {
+        image 'gcr.io/kaniko-project/executor:debug'
+        args "--entrypoint=''" // Jenkins 会先启动容器，并使用 cat 命令 hold 住，需使用 debug 的 Tag 的镜像，并修改 entrypoint
+        label "agent-1"
+    }
+}
+```
 
-使用 DooD 的方式，直接 debian 镜像手撸命令
-
-### 插件 Docker Pipeline
-
-- “文档” [docker-workflow-plugin/Docker.groovy at master · jenkinsci/docker-workflow-plugin · GitHub](https://github.com/jenkinsci/docker-workflow-plugin/blob/master/src/main/resources/org/jenkinsci/plugins/docker/workflow/Docker.groovy)
 
 ## Step
 
