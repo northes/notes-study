@@ -4,7 +4,7 @@ docker run -d \
   -e PUID=1000 \
   -e PGID=1000 \
   -e TZ=Asia/Shanghai \
-  -e TRANSMISSION_WEB_HOME=/combustion-release/ `#optional` \
+  -e TRANSMISSION_WEB_HOME=/transmissionic/ `#optional` \
   -e USER=username `#optional` \
   -e PASS=password `#optional` \
   -e WHITELIST=iplist `#optional` \
