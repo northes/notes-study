@@ -19,3 +19,9 @@ docker run -d \
   --restart unless-stopped \
   lscr.io/linuxserver/transmission:latest
 ```
+
+
+## 报错
+
+- 在Homelab中通过homelab账号，SMB协议挂载的路径，会报错权限不足，将环境变量中的PUID和PGID修改为0即可
+- 下载一直没速度，检查tracker站是否可以不翻墙访问，如果不是，上代理
