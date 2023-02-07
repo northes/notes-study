@@ -1,5 +1,0 @@
-
-```shell
-ifconfig
-ip addr
-```
