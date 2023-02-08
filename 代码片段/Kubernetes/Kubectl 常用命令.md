@@ -24,6 +24,8 @@ kubectl exec -it <pod-name> -- bash
 kubectl exec -it <pod-name> -c <container-name> -- bash
 # 伸缩拓展副本
 kubectl scale deployment <name> --replicas=5
+# 设置 0 以达到“暂停”的效果
+kubectl scale deployment <name> --replicas=0
 # 把集群内端口映射到节点(通过访问集群ip:8090即可访问到指定pod的8080端口)
 kubectl port-forward <pod-name> 8090:8080
 # 查看历史
