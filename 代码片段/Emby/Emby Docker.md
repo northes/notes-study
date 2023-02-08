@@ -11,5 +11,6 @@ docker run -d \
     --env UID=1000 \
     --env GID=100 \
     --env GIDLIST=100 \
+    --restart always \
     emby/embyserver:latest
 ```
