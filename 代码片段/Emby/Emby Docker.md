@@ -2,8 +2,8 @@
 ```bash
 docker run -d \
     --name embyserver \
-    --volume /root/emby_data/config:/config \
-    --volume /tmp/nas/video:/media \
+    --volume /data/emby_data/config:/config \
+    --volume /video:/media \
     --net=host \
     --device /dev/dri:/dev/dri \
     --publish 8096:8096 \

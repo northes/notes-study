@@ -17,7 +17,7 @@ docker run -d \
   -v /path/to/downloads:/downloads \
   -v /path/to/watch/folder:/watch \
   --restart unless-stopped \
-  lscr.io/linuxserver/transmission:latest
+  linuxserver/transmission:latest
 ```
 
 

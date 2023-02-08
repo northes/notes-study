@@ -7,7 +7,7 @@ apt-get install cifs-utils vim
 ## 挂载
 
 ```bash
-mount -t cifs <共享点路径> <挂载点> -o username=<用户名>,noserverino
+mount -t cifs <共享点路径> <挂载点> -o username=<用户名>,password=<密码>
 ```
 
 ## 例子
