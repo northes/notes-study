@@ -70,6 +70,11 @@ ifconfig
 
 ## 客户端
 
+```bash
+# debian
+apt-get install nfs-common
+```
+
 去到另一台机器上，绑定 nfs 目录
 
 <master.ip> 替换为上面开启了 nfs 的主机 IP
