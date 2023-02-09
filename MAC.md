@@ -16,3 +16,4 @@ Commond + M
 vscode
 上一个位置：Ctrl + -
 命令面板：Commond + Shift + P
+批量重命名：Shift + F6
