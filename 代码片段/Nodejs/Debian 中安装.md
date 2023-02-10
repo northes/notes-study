@@ -2,8 +2,8 @@
 1. 设置
 
 ```shell
-## 14.x 不需要动
-curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash -
+## '16.x' 不需要改，就是.x结尾
+curl -sL https://deb.nodesource.com/setup_16.x | sudo -E bash -
 
 curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
 ```
