@@ -1,22 +1,51 @@
 {
-  "collapse-filter": true,
+  "collapse-filter": false,
   "search": "",
   "showTags": false,
   "showAttachments": false,
   "hideUnresolved": false,
   "showOrphans": true,
-  "collapse-color-groups": true,
-  "colorGroups": [],
+  "collapse-color-groups": false,
+  "colorGroups": [
+    {
+      "query": "path:个人项目",
+      "color": {
+        "a": 1,
+        "rgb": 14701138
+      }
+    },
+    {
+      "query": "path:代码片段",
+      "color": {
+        "a": 1,
+        "rgb": 14725458
+      }
+    },
+    {
+      "query": "path:开发",
+      "color": {
+        "a": 1,
+        "rgb": 11657298
+      }
+    },
+    {
+      "query": "path:家庭工作站",
+      "color": {
+        "a": 1,
+        "rgb": 5431378
+      }
+    }
+  ],
   "collapse-display": true,
-  "showArrow": false,
-  "textFadeMultiplier": 0,
-  "nodeSizeMultiplier": 1,
-  "lineSizeMultiplier": 1,
-  "collapse-forces": true,
-  "centerStrength": 0.518713248970312,
-  "repelStrength": 10,
+  "showArrow": true,
+  "textFadeMultiplier": -1.8,
+  "nodeSizeMultiplier": 1.13040364583333,
+  "lineSizeMultiplier": 1.2161376953125,
+  "collapse-forces": false,
+  "centerStrength": 0.512776692708333,
+  "repelStrength": 10.7503255208333,
   "linkStrength": 1,
-  "linkDistance": 250,
-  "scale": 0.6215569741313064,
+  "linkDistance": 500,
+  "scale": 0.19126482787737864,
   "close": true
 }
