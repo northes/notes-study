@@ -8,5 +8,6 @@
   "attachmentFolderPath": "./assets",
   "alwaysUpdateLinks": true,
   "autoConvertHtml": true,
-  "newLinkFormat": "relative"
+  "newLinkFormat": "relative",
+  "vimMode": true
 }
