@@ -9,5 +9,5 @@
   "alwaysUpdateLinks": true,
   "autoConvertHtml": true,
   "newLinkFormat": "relative",
-  "vimMode": true
+  "vimMode": false
 }
