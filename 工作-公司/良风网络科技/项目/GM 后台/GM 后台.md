@@ -70,3 +70,9 @@
     }
 ]
 ```
+
+并在 `page.tpl` 上添加
+
+```html
+{{template "/auto_backend/base/header.tpl" .}}
+```
