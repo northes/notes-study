@@ -45,6 +45,10 @@ T: SI | SELECT MAX_BY("D",__time__)
 * | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
 ```
 
+```sql
+* | SELECT playerid as playerid, SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day,playerid ORDER BY day DESC LIMIT 10
+```
+
 今天活跃玩家观看广告次数（按照状态分）
 
 ```sql
