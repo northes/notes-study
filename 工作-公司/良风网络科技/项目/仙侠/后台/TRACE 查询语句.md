@@ -25,30 +25,18 @@ CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true;
 
 ## TodayActivePlayerShowADCount: advertise
 
-今天活跃玩家观看广告次数
-
-```sql
-OpID = 0 | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount LIMIT 100000;
-```
-
 今天活跃玩家观看广告次数（按照状态查）
 
 ```sql
-OpID = 3 or OpID = 4 or OpID = 5 or OpID = 6 | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID  LIMIT 100000;
+OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6 | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID  LIMIT 100000;
 ```
 
 ## TodayNewPlayerShowADCount: advertise
 
-今天新玩家观看广告次数
-
-```sql
-OpID = 0 AND CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount LIMIT 100000;
-```
-
 今天新玩家观看广告次数（按状态查）
 
 ```sql
-(OpID = 3 or OpID = 4 or OpID = 5 or OpID = 6) AND CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID LIMIT 100000;
+(OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6) AND CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID LIMIT 100000;
 ```
 
 ## TodayTriggerEventCount: common_trace-event 
@@ -61,7 +49,7 @@ T: Ev | set session parallel_sql=true; SELECT COUNT(1) AS TotalEventCount LIMIT 
 
 ## TodaySignCount: common_trace-sign
 
-今天登录总数
+今天签到总数
 
 ```sql
 T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS TotalSignCount LIMIT 100000
