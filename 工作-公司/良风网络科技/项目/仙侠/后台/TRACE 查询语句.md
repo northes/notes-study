@@ -1,37 +1,26 @@
 
 ## OnlinePlayerCount: common_trace-server_info
 
-```sql
-T: SI | SELECT MAX_BY("D",__time__)
-```
+在线玩家数量
 
+```sql
+T: SI | set session parallel_sql=true; SELECT MAX_BY("D",__time__)
+```
 
 ## TodayActivePlayerCount: player_info
 
 今日活跃玩家的数量
 
 ```sql
-* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', LastActiveDayUpdateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1
-```
-
-每日活跃玩家的数量
-
-```sql
-* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', LastActiveDayUpdateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
+* | set session parallel_sql=true; SELECT COUNT(PlayerID) AS PlayerCount LIMIT 10000000
 ```
 
 ## TodayNewPlayerCount: player_info
 
-今天新增玩家的数量
+今天新增玩家的数量（CreateTimestamp 为玩家账号创建的时间）
 
 ```sql
-* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', CreateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1
-```
-
-每日新增玩家数量
-
-```sql
-* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', CreateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
+CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS PlayerCount LIMIT 10000000
 ```
 
 ## TodayActivePlayerShowADCount: advertise
@@ -39,17 +28,13 @@ T: SI | SELECT MAX_BY("D",__time__)
 今天活跃玩家观看广告次数
 
 ```sql
-* | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
-```
-
-```sql
-* | SELECT playerid as playerid, SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day,playerid ORDER BY day DESC LIMIT 10
+OpID = 0 | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount LIMIT 100000;
 ```
 
 今天活跃玩家观看广告次数（按照状态查）
 
 ```sql
-op = Poped or op =  VideoAborted or op = VideoFailed or op = VideoTried | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
+OpID = 3 or OpID = 4 or OpID = 5 or OpID = 6 | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID  LIMIT 100000;
 ```
 
 ## TodayNewPlayerShowADCount: advertise
@@ -57,13 +42,13 @@ op = Poped or op =  VideoAborted or op = VideoFailed or op = VideoTried | set se
 今天新玩家观看广告次数
 
 ```sql
-* | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day', playercreatetimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
+OpID = 0 AND CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount LIMIT 100000;
 ```
 
 今天新玩家观看广告次数（按状态查）
 
 ```sql
-op = Poped or op =  VideoAborted or op = VideoFailed or op = VideoTried | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day', playercreatetimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
+(OpID = 3 or OpID = 4 or OpID = 5 or OpID = 6) AND CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID LIMIT 100000;
 ```
 
 ## TodayTriggerEventCount: common_trace-event 
@@ -71,7 +56,7 @@ op = Poped or op =  VideoAborted or op = VideoFailed or op = VideoTried | set se
 今天触发事件总数
 
 ```sql
-T: Ev | set session parallel_sql=true; SELECT COUNT(1) AS count, date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1
+T: Ev | set session parallel_sql=true; SELECT COUNT(1) AS TotalEventCount LIMIT 100000
 ```
 
 ## TodaySignCount: common_trace-sign
@@ -79,5 +64,5 @@ T: Ev | set session parallel_sql=true; SELECT COUNT(1) AS count, date_trunc('day
 今天登录总数
 
 ```sql
-T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS count, date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1
+T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS TotalSignCount LIMIT 100000
 ```
