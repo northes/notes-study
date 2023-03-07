@@ -1,5 +1,5 @@
 
-## OnlinePlayerCount: ommon_trace-server_info
+## OnlinePlayerCount: common_trace-server_info
 每小时统计一次（传入截止时间）：
 
 > \*|set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID), __time__ ... LIMIT 100000000
@@ -9,19 +9,18 @@ T: Si
 ```
 
 
-
 ## TodayActivePlayerCount: player_info
 
 今日活跃玩家的数量
 
 ```sql
-* | select count(DISTINCT PlayerID) as player, date_trunc('day', LastActiveDayUpdateTimestamp) as day group by day order by day desc limit 1
+* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', LastActiveDayUpdateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1
 ```
 
 每日活跃玩家的数量
 
 ```sql
-* | select count(DISTINCT PlayerID) as player, date_trunc('day', LastActiveDayUpdateTimestamp) as day group by day order by day desc limit 1000000
+* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', LastActiveDayUpdateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
 ```
 
 ## TodayNewPlayerCount: player_info
@@ -29,13 +28,13 @@ T: Si
 今天新增玩家的数量
 
 ```sql
-* | select count(DISTINCT PlayerID) as player, date_trunc('day', CreateTimestamp) as day group by day order by day desc limit 1
+* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', CreateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1
 ```
 
 每日新增玩家数量
 
 ```sql
-* | select count(DISTINCT PlayerID) as player, date_trunc('day', CreateTimestamp) as day group by day order by day desc limit 1000000
+* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS player, date_trunc('day', CreateTimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
 ```
 
 ## TodayActivePlayerShowADCount: advertise
@@ -43,7 +42,7 @@ T: Si
 今天活跃玩家观看广告次数
 
 ```sql
-
+* | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
 ```
 
 ## TodayNewPlayerShowADCount: advertise
@@ -51,7 +50,7 @@ T: Si
 今天新玩家观看广告次数
 
 ```sql
-
+* | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day', playercreatetimestamp) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
 ```
 
 ## TodayTriggerEventCount: common_trace-event 
@@ -59,7 +58,7 @@ T: Si
 今天触发事件总数
 
 ```sql
-T: Ev | select count(1) as count, date_trunc('day',__time__) as day group by day order by day desc limit 1
+T: Ev | set session parallel_sql=true; SELECT COUNT(1) AS count, date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1
 ```
 
 ## TodaySignCount: common_trace-sign
@@ -67,5 +66,5 @@ T: Ev | select count(1) as count, date_trunc('day',__time__) as day group by day
 今天登录总数
 
 ```sql
-T: Sg | select count(1) as count, date_trunc('day',__time__) as day group by day order by day desc limit 1
+T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS count, date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1
 ```
