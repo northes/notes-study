@@ -4,8 +4,8 @@
 
 > \*|set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID), __time__ ... LIMIT 100000000
 
-```
-T: Si
+```sql
+T: SI | SELECT MAX_BY("D",__time__)
 ```
 
 
@@ -43,6 +43,12 @@ T: Si
 
 ```sql
 * | set session parallel_sql=true; SELECT SUM(daytotal) AS daytotal ,date_trunc('day',__time__) AS day GROUP BY day ORDER BY day DESC LIMIT 1000000
+```
+
+今天活跃玩家观看广告次数（按照状态分）
+
+```sql
+
 ```
 
 ## TodayNewPlayerShowADCount: advertise
