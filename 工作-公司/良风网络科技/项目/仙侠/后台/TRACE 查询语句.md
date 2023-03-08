@@ -12,7 +12,7 @@ T: SI | set session parallel_sql=true; SELECT MAX_BY("D",__time__)
 今日活跃玩家的数量
 
 ```sql
-* | set session parallel_sql=true; SELECT COUNT(PlayerID) AS PlayerCount LIMIT 10000000
+* | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS PlayerCount LIMIT 10000000
 ```
 
 ## TodayNewPlayerCount: player_info
@@ -20,7 +20,7 @@ T: SI | set session parallel_sql=true; SELECT MAX_BY("D",__time__)
 今天新增玩家的数量（CreateTimestamp 为玩家账号创建的时间）
 
 ```sql
-CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS PlayerCount LIMIT 10000000
+CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS PlayerCount LIMIT 10000000
 ```
 
 ## TodayActivePlayerShowADCount: advertise
@@ -28,7 +28,7 @@ CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true;
 今天活跃玩家观看广告次数（按照状态查）
 
 ```sql
-OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6 | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID  LIMIT 100000;
+OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6 | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID  ORDER BY OpID LIMIT 100000;
 ```
 
 ## TodayNewPlayerShowADCount: advertise
@@ -36,7 +36,7 @@ OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6 | set session parallel_
 今天新玩家观看广告次数（按状态查）
 
 ```sql
-(OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6) AND CreateTimestamp >= %d AND CreateTimestamp <= %d | set session parallel_sql=true; SELECT COUNT(PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID LIMIT 100000;
+(OpID = 0 OR OpID = 3 OR OpID = 4 OR OpID = 5 OR OpID = 6) AND playercreatetimestamp >= %d AND playercreatetimestamp <= %d | set session parallel_sql=true; SELECT COUNT(DISTINCT PlayerID) AS TotalViewAdCount,OpID GROUP BY OpID LIMIT 100000;
 ```
 
 ## TodayTriggerEventCount: common_trace-event 
