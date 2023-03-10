@@ -7,3 +7,6 @@ path+=('/Users/mac/go/bin')
 ```
 path=('xxx' $path)
 ```
+
+## 主题
+
