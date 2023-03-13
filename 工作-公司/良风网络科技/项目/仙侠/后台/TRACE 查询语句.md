@@ -55,16 +55,20 @@ T: Ev | set session parallel_sql=true; SELECT COUNT(1) AS TotalEventCount LIMIT 
 T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS TotalSignCount LIMIT 100000
 ```
 
-## 按照通关进度统计玩家数量: player_info
-
-```sql
-* | set session parallel_sql=true; select count(DISTINCT PlayerID) as PlayerCount ,MaxDungeonDiffLevelHistory group by MaxDungeonDiffLevelHistory order by MaxDungeonDiffLevelHistory
-```
+## PlayerDungeonLevel: player_info
 
 统计某天创建的玩家的通关进度
 
-CreateTimestamp 为玩家创建时间
+> CreateTimestamp 为玩家创建时间
 
 ```sql
 CreateTimestamp >= %d AND CreateTimestamp <= %d  | select count(DISTINCT PlayerID) as PlayerCount ,DungeonMainLevel group by DungeonMainLevel order by DungeonMainLevel
 ```
+
+新版：
+
+```sql
+CreateTimestamp >= %d AND CreateTimestamp <= %d  | set session parallel_sql=true; SELECT PlayerID,max(DungeonMainLevel) AS MaxLevel GROUP BY PlayerID ORDER BY MaxLevel LIMIT 1000000
+```
+
+拿到数据后用 go 统计总数
