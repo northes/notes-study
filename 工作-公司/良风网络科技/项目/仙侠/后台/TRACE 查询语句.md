@@ -65,10 +65,16 @@ T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS TotalSignCount LIMIT 1
 CreateTimestamp >= %d AND CreateTimestamp <= %d  | select count(DISTINCT PlayerID) as PlayerCount ,DungeonMainLevel group by DungeonMainLevel order by DungeonMainLevel
 ```
 
-新版：
+### 新版
+
+#### 拿到数据后用 go 统计总数
 
 ```sql
 CreateTimestamp >= %d AND CreateTimestamp <= %d  | set session parallel_sql=true; SELECT PlayerID,max(DungeonMainLevel) AS MaxLevel GROUP BY PlayerID ORDER BY MaxLevel LIMIT 1000000
 ```
 
-拿到数据后用 go 统计总数
+#### 直接使用分析语句统计总数
+
+```sql
+set session parallel_sql=true; select COUNT(DISTINCT PlayerID) AS PlayerCount, MaxLevel from (SELECT PlayerID,max(DungeonMainLevel) AS MaxLevel FROM log GROUP BY PlayerID ORDER BY MaxLevel LIMIT 1000000) group by MaxLevel order by MaxLevel
+```
