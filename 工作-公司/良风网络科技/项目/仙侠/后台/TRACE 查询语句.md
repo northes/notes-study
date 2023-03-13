@@ -66,5 +66,5 @@ T: Sg | set session parallel_sql=true; SELECT COUNT(1) AS TotalSignCount LIMIT 1
 CreateTimestamp 为玩家创建时间
 
 ```sql
-CreateTimestamp >= %d AND CreateTimestamp <= %d  | select count(DISTINCT PlayerID) as PlayerCount ,MaxDungeonDiffLevelHistory group by MaxDungeonDiffLevelHistory order by MaxDungeonDiffLevelHistory
+CreateTimestamp >= %d AND CreateTimestamp <= %d  | select count(DISTINCT PlayerID) as PlayerCount ,DungeonMainLevel group by DungeonMainLevel order by DungeonMainLevel
 ```
