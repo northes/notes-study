@@ -5,7 +5,7 @@
   "trashOption": "local",
   "newFileLocation": "current",
   "useMarkdownLinks": true,
-  "attachmentFolderPath": "./assets",
+  "attachmentFolderPath": "开发/优秀前端官网",
   "alwaysUpdateLinks": true,
   "autoConvertHtml": true,
   "newLinkFormat": "relative",
