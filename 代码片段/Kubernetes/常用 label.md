@@ -1,1 +1,0 @@
-[众所周知的标签、注解和污点 | Kubernetes](https://kubernetes.io/zh-cn/docs/reference/labels-annotations-taints/)
