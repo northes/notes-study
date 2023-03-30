@@ -1,0 +1,12 @@
+{
+	"nodes":[
+		{"id":"9e864465ff53265e","x":-240,"y":-140,"width":400,"height":400,"type":"file","file":"开发/前端/美观的官网.md"},
+		{"id":"a3ee8872ffbec026","x":-90,"y":320,"width":250,"height":60,"type":"text","text":"test"},
+		{"id":"0ca2877d6ab4cef3","x":140,"y":500,"width":400,"height":275,"type":"file","file":"家庭工作站/网络拓扑.md"},
+		{"id":"5f1b0b80c202edf3","x":-300,"y":500,"width":400,"height":400,"type":"link","url":"https://northes.io"}
+	],
+	"edges":[
+		{"id":"2c7d89cd2e3f3303","fromNode":"0ca2877d6ab4cef3","fromSide":"top","toNode":"a3ee8872ffbec026","toSide":"bottom"},
+		{"id":"943b942214db0bc0","fromNode":"9e864465ff53265e","fromSide":"bottom","toNode":"a3ee8872ffbec026","toSide":"top"}
+	]
+}
