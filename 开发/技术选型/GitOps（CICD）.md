@@ -6,13 +6,18 @@
 - Circle CI
 - Team CIity
 - Gitlab CI
-- [Site Unreachable](https://jenkins-x.io/zh/)
+- [Jenkins-x](https://jenkins-x.io/zh/)
+- [argo-workflows](https://github.com/argoproj/argo-workflows/)
 
 
 ## CD
 
 - FluxCD
-- ArgoCD
+- ArgoCD [Argo CD - Declarative GitOps CD for Kubernetes](https://argo-cd.readthedocs.io/en/stable/)
+
+## 生态
+
+- [Home | Argo](https://argoproj.github.io/)
 
 ## 镜像构建
 
