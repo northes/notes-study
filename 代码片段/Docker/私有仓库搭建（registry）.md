@@ -6,16 +6,44 @@ docker run -d \
   --restart=always \
   --name registry \
   -v /mnt/registry:/var/lib/registry \
+  -v /auth:/auth \ # 使用 htpasswd
+  -v /tls:/tls \ # 自签证书
+  -v xx/config.yml:/etc/docker/registry/config.yml \
   registry:2
 ```
 
-## 设置
+## 配置
+
+### 文档
 
 [Configuring a registry](https://docs.docker.com/registry/configuration/)
+
+### 示例
+
+```yaml
+version: 0.1
+storage:
+  filesystem:
+    rootdirectory: /var/lib/registry
+    maxthreads: 100
+http:
+  addr: 0.0.0.0:5000
+  tls:
+    certificate: /tls/selfsigned-certificate.crt
+    key: /tls/selfsigned-key.key
+auth:
+  htpasswd:
+    realm: basic-realm
+    path: /auth/htpasswd
+```
+
+### 挂载
 
 ```bash
 docker run ... -v `pwd`/config.yml:/etc/docker/registry/config.yml ... registry:2
 ```
+
+### 完整配置文件
 
 ```yaml
 version: 0.1
