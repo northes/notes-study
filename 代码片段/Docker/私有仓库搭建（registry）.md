@@ -268,3 +268,16 @@ validation:
 ## API
 
 [HTTP API V2](https://docs.docker.com/registry/spec/api/)
+
+## 使用自签证书
+
+[Test an insecure registry | Docker Documentation](https://docs.docker.com/registry/insecure/)
+
+## 生成 htpaswd
+
+```bash
+mkdir auth
+docker run \
+  --entrypoint htpasswd \
+  httpd:2 -Bbn testuser testpassword > auth/htpasswd
+```
