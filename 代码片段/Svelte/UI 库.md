@@ -1,2 +1,7 @@
 - [BeButton 按钮 组件文档 BeerUi-官方文档](https://beer-ui.com/components/button)
-- [Card – Attractions](https://illright.github.io/attractions//docs/components/card)
+- [Component Party](https://component-party.dev/)
+- [SvelteUI - A variety of components, actions, transition and utility functions — SvelteUI](https://www.svelteui.org/)
+- [Attractions](https://illright.github.io/attractions//)
+- [Svelte Material UI](https://sveltematerialui.com/)
+- [Carbon Components Svelte](https://carbon-components-svelte.onrender.com/)
+- [Svelteit - Svelteit Docs](https://docs.svelteit.dev/)
