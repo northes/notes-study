@@ -1,0 +1,1 @@
+- [daisyUI — Tailwind CSS Components](https://daisyui.com/)
