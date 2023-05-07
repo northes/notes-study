@@ -1,1 +1,3 @@
 - [daisyUI — Tailwind CSS Components](https://daisyui.com/)
+- [Tailwind CSS - Rapidly build modern websites without ever leaving your HTML.](https://tailwindcss.com/)
+- [Tailwind CSS 中文文档 - 无需离开您的HTML，即可快速建立现代网站。](https://www.tailwindcss.cn/)
