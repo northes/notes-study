@@ -138,3 +138,30 @@
 
 # 设置在子对象
 
+## 初始大小（Basis）
+
+[Flex Basis - Tailwind CSS](https://tailwindcss.com/docs/flex-basis)
+
+- basis-1：子元素初始占用 0.25rem 的主轴长度
+- ...
+
+设置后，子元素的 width 设置将失效
+
+## 放大（grow）
+
+- grow：放大
+- grow-0：不允许放大
+
+## 缩小（shrink）
+
+当子对象的宽度过大时，进行缩小
+
+- shrink：缩小
+- shrink-0：不允许缩小
+
+## 简写
+
+- flex-1：允许放大缩小，忽略初始值
+- flex-auto：允许放大缩小，考虑初始值
+- flex-initial：允许缩小不允许放大，考虑初始值
+- flex-none：不允许放大缩小
