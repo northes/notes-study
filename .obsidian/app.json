@@ -7,7 +7,7 @@
   "useMarkdownLinks": true,
   "attachmentFolderPath": "./assets",
   "alwaysUpdateLinks": true,
-  "autoConvertHtml": true,
+  "autoConvertHtml": false,
   "newLinkFormat": "relative",
   "vimMode": false
 }
