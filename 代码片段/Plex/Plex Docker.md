@@ -9,11 +9,11 @@ docker run \
 -d \
 --name plex \
 --network=host \
--e TZ="<timezone>" \
--e PLEX_CLAIM="<claimToken>" \
--v <path/to/plex/database>:/config \
--v <path/to/transcode/temp>:/transcode \
--v <path/to/media>:/data \
+-e TZ="Asia/Shanghai" \
+-e PLEX_CLAIM="claim-1jWz9edJt_nuX8yn2vDU" \
+-v /root/plex/config:/config \
+-v /root/plex/transcode:/transcode \
+-v /root/plex/data:/data \
 plexinc/pms-docker
 ```
 
