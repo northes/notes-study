@@ -10,6 +10,12 @@
 - [Agnostic](https://www.agnosticui.com/)
 - [Webpack App](https://sveltestrap.js.org/?path=/story/components--get-started)
 - [Smelte: Material design using Tailwind CSS for Svelte](https://smeltejs.com/)
+- [Skeleton — UI Toolkit for Svelte + Tailwind](https://www.skeleton.dev/)
+
+### 基于 Tailwind CSS
+
+- [Flowbite - Build websites even faster with components on top of Tailwind CSS](https://flowbite.com/)
+- [Flowbite Svelte - UI Component Library](https://flowbite-svelte.com/)
 
 
 ## 移动端
