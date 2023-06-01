@@ -12,6 +12,15 @@
 - [Smelte: Material design using Tailwind CSS for Svelte](https://smeltejs.com/)
 - [Skeleton — UI Toolkit for Svelte + Tailwind](https://www.skeleton.dev/)
 
+
+- [Fluent Svelte](https://fluent-svelte.vercel.app/)
+微软 Fluent 设计的 Svelte 实现
+
+
+- [This is SvelteKit embed](https://sveltekit-embed.vercel.app/)
+嵌入组件 Youtube、Sotify，Tweet 等
+
+
 ### 基于 Tailwind CSS
 
 - [Flowbite - Build websites even faster with components on top of Tailwind CSS](https://flowbite.com/)
