@@ -11,6 +11,7 @@
 - [Webpack App](https://sveltestrap.js.org/?path=/story/components--get-started)
 - [Smelte: Material design using Tailwind CSS for Svelte](https://smeltejs.com/)
 - [Skeleton — UI Toolkit for Svelte + Tailwind](https://www.skeleton.dev/)
+- [daisyUI — Tailwind CSS Components](https://daisyui.com/)
 
 
 - [Fluent Svelte](https://fluent-svelte.vercel.app/)
@@ -23,7 +24,7 @@
 
 ### 基于 Tailwind CSS
 
-- [Flowbite - Build websites even faster with components on top of Tailwind CSS](https://flowbite.com/)
+
 - [Flowbite Svelte - UI Component Library](https://flowbite-svelte.com/)
 
 
