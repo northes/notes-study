@@ -1,6 +1,10 @@
 ## 快捷键
 Ctrl+R：显示或隐藏尺子
 Ctrl+D: 取消选区
+Ctrl+T：开始变换图形（按住ctrl键进行变形，Enter应用变形）
+T：旋转画布
+Ctrl+Alt：按住拖动放大缩小笔刷
+放大镜：默认放大，按住Alt键缩小。拖动框选放大
 
 
 ![](assets/Pasted%20image%2020230612212308.png)
