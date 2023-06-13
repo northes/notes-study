@@ -9,5 +9,7 @@
   "alwaysUpdateLinks": true,
   "autoConvertHtml": false,
   "newLinkFormat": "relative",
-  "vimMode": false
+  "vimMode": false,
+  "strictLineBreaks": true,
+  "showUnsupportedFiles": true
 }
