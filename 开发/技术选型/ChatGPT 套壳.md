@@ -3,3 +3,4 @@
 [Just a moment...](https://freegpt.one/)
 [ChatGPT API Demo](https://chatgpt.ddiu.me/)
 [Poe - Fast, Helpful AI Chat](https://poe.com/)
+[AIProxy](https://aiproxy.io/)
