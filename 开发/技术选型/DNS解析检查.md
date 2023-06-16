@@ -1,0 +1,2 @@
+- [DNSMap - Worldwide DNS Propagation Checker - Global test](https://dnsmap.io/)
+- [DNS Checker - DNS Check Propagation Tool](https://dnschecker.org/)
