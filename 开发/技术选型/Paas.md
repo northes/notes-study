@@ -17,3 +17,4 @@
 ## 开源自建
 
 - [Coolify](https://coolify.io/)
+- [The Open Source Firebase Alternative | Supabase](https://supabase.com/)
