@@ -4,7 +4,7 @@
 - [Arco Design - 企业级产品的完整设计和开发解决方案](https://arco.design/)
 - [daisyUI — Tailwind CSS Components](https://daisyui.com/)
 - [Headless UI - Unstyled, fully accessible UI components](https://headlessui.com/)
-
+- [Geist - Vercel Design](https://vercel.com/design/introduction)
 
 ## 基于TailwindCSS
 
