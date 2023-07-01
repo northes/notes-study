@@ -13,6 +13,7 @@
 - [Skeleton — UI Toolkit for Svelte + Tailwind](https://www.skeleton.dev/)
 - [daisyUI — Tailwind CSS Components](https://daisyui.com/)
 - [Fetching Title#3l50](https://svelvet.mintlify.app/introduction)
+- [YeSvelte Components](https://www.yesvelte.com/)
 
 - [Fluent Svelte](https://fluent-svelte.vercel.app/)
 微软 Fluent 设计的 Svelte 实现
