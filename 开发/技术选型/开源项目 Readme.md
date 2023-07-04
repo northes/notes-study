@@ -23,3 +23,7 @@
 ## 个人首页
 
 - [GitHub - anuraghazra/github-readme-stats: :zap: Dynamically generated stats for your github readmes](https://github.com/anuraghazra/github-readme-stats)
+
+## 项目动态
+
+- [Beautiful insights for your GitHub repositories](https://repobeats.axiom.co/)
