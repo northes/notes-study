@@ -13,10 +13,10 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "测试/笔记1.md",
-                "mode": "source",
+                "file": "词书/开发.md",
+                "mode": "preview",
                 "backlinks": false,
-                "source": true
+                "source": false
               }
             }
           }
@@ -72,6 +72,14 @@
           "type": "starred",
           "state": {}
         }
+      },
+      {
+        "id": "a5793f6f86a03380",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {}
+        }
       }
     ],
     "currentTab": 0
@@ -86,7 +94,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "测试/笔记1.md",
+            "file": "词书/开发.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -103,7 +111,7 @@
         "state": {
           "type": "outgoing-link",
           "state": {
-            "file": "测试/笔记1.md",
+            "file": "词书/开发.md",
             "linksCollapsed": false,
             "unlinkedCollapsed": true
           }
@@ -115,15 +123,63 @@
         "state": {
           "type": "outline",
           "state": {
-            "file": "测试/笔记1.md"
+            "file": "词书/开发.md"
           }
         }
       }
     ],
     "currentTab": 0
   },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false
+    }
+  },
   "active": "3c95476b219edb3f",
   "lastOpenFiles": [
-    "开发/镜像加速.md"
+    "代码片段/Argo/ArgoCD/备忘.md",
+    "个人项目/PVE APP/README.md",
+    "家庭工作站/内网设备/服务器/家用服务器.md",
+    "代码片段/Clash/控制面板.md",
+    "代码片段/K3s/问题排查.md",
+    "代码片段/Bitwarden/Readme.md",
+    "代码片段/PVE/assets/Pasted image 20230105221858.png",
+    "代码片段/初始化/debian.md",
+    "代码片段/K8s/暴露服务.md",
+    "代码片段/Jenkins/插件.md",
+    "个人项目/PVE APP/assets/Pasted image 20230119221741.png",
+    "代码片段/Jenkins/assets/Pasted image 20230131161137.png",
+    "代码片段/ZSH/安装 oh-my-zsh.md",
+    "代码片段/Docker/控制 Stdout 日志大小.md",
+    "代码片段/Git/变更 .gitignore.md",
+    "开发/免费合集.md",
+    "代码片段/Gitlab/GitLab Docker.md",
+    "代码片段/Linux/主机名.md",
+    "代码片段/Etcd/etcd docker.md",
+    "开发/技术选型/内网穿透.md",
+    "视觉设计/assets/Pasted image 20230612161403.png",
+    "开发/技术选型/产品发布.md",
+    "家庭工作站/私有化部署/私有化部署.md",
+    "代码片段/Linux/alpine/镜像加速.md",
+    "开发/技术选型/数据可视化面板.md",
+    "开发/技术选型/PT Trackers.md",
+    "代码片段/PVE/assets/Pasted image 20221217184640.png",
+    "代码片段/Kubernetes/快查文档.md",
+    "家庭工作站/NAS/威联通.md",
+    "家庭工作站/NAS/群辉.md",
+    "代码片段/Jenkins/assets/Pasted image 20230130181442.png",
+    "代码片段/K3s/使用 NFS storeClass.md",
+    "视觉设计/assets/Pasted image 20230612212308.png",
+    "代码片段/Jenkins/assets/Pasted image 20230130181538.png",
+    "代码片段/Argo/ArgoWorkflow/assets/Pasted image 20230407172302.png",
+    "代码片段/Raft/@eaDir/raft.pdf@SynoEAStream",
+    "代码片段/Linux/assets/Pasted image 20230525164548.png",
+    "代码片段/Raft/@eaDir/raft.pdf@SynoResource",
+    "代码片段/Raft/raft.pdf"
   ]
 }
