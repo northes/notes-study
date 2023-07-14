@@ -16,5 +16,6 @@
 
 ## 开源自建
 
+- [GitHub - caprover/caprover: Scalable PaaS (automated Docker+nginx) - aka Heroku on Steroids](https://github.com/caprover/caprover)
 - [Coolify](https://coolify.io/)
 - [The Open Source Firebase Alternative | Supabase](https://supabase.com/)
