@@ -11,7 +11,14 @@
 
 第三方
 
-- [GitHub - kaermorchen/meiliadmin: Meiliadmin is a dashboard for Meilisearch](https://github.com/kaermorchen/meiliadmin)
+https://kaermorchen.github.io/meiliadmin  
+这个布局和操作逻辑都很好，但是打开文档详情有bug，会报错找不到文档
+
+https://meilisearch-ui.riccox.com/       
+这个完成度较高，就是界面色块太多了有点花
+
+https://meili-manager.vercel.app/        
+这个完成度也较高点，但是布局看起来有点乱
 
 ## Q&A
 
