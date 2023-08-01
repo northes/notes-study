@@ -38,3 +38,24 @@ https://meili-manager.vercel.app/
 ## Awesome
 
 - [GitHub - meilisearch/awesome-meilisearch: A curated list of awesome Meilisearch resources](https://github.com/meilisearch/awesome-meilisearch)
+
+## Curls
+
+### 列出所有 Keys
+
+```bash
+curl -H 'Authorization: Bearer RnABufmsAIGIEtOKqSPpVUHYmRaFcOHLap7846OqdCQ' -X GET 'http://localhost:7700/keys'   
+```
+
+### 创建索引
+
+```bash
+curl \
+  -X POST 'http://localhost:7700/indexes' \
+  -H 'Content-Type: application/json' \
+  -H 'Authorization: Bearer RnABufmsAIGIEtOKqSPpVUHYmRaFcOHLap7846OqdCQ' \
+  --data-binary '{
+    "uid": "movies",
+    "primaryKey": "id"
+  }'
+```
