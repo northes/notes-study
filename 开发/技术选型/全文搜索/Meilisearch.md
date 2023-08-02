@@ -59,3 +59,9 @@ curl \
     "primaryKey": "id"
   }'
 ```
+
+## 资产
+
+Logo，Banner 等
+
+- [GitHub - meilisearch/devrel: Anything Developer Relations at Meili](https://github.com/meilisearch/devrel)
