@@ -1,0 +1,2147 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)https://www.cnblogs.com/taotaozhuanyong/p/16688643.html -->
+<html lang="zh-cn" class="" style="--olcb-folder-code-block-max-height: 80vh; --cnb-code-bg: rgb(245, 245, 245); --cnb-code-font-size: 12px; --cnb-code-color: rgb(68, 68, 68);"><link type="text/css" id="dark-mode" rel="stylesheet" href="https://www.cnblogs.com/taotaozhuanyong/p/16688643.html"><style type="text/css" id="dark-mode-сustom-style"></style><style type="text/css" id="dark-mode-theme-changer-style"></style><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="origin-when-cross-origin">
+    <meta name="description" content="大家都知道游戏文字、文章等一些风控场景都实现了敏感词检测，一些敏感词会被屏蔽掉或者文章无法发布。打游戏的时候不要骂人，骂人是不对的，但有时候无奈化身为肖邦。 今天我就分享用Go实现敏感词前缀树来达到文本的敏感词检测，让我们一探究竟！ 敏感词检测 实现敏感词检测都很多种方法，例如暴力、正则、前缀树等。">
+    <meta property="og:description" content="大家都知道游戏文字、文章等一些风控场景都实现了敏感词检测，一些敏感词会被屏蔽掉或者文章无法发布。打游戏的时候不要骂人，骂人是不对的，但有时候无奈化身为肖邦。 今天我就分享用Go实现敏感词前缀树来达到文本的敏感词检测，让我们一探究竟！ 敏感词检测 实现敏感词检测都很多种方法，例如暴力、正则、前缀树等。">
+    <meta http-equiv="Cache-Control" content="no-transform">
+    <meta http-equiv="Cache-Control" content="no-siteapp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园</title>
+    <link id="favicon" rel="shortcut icon" href="https://common.cnblogs.com/favicon.svg" type="image/svg+xml">
+    
+    <style>#home :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs), :not(.cnblogs_code):not(.cnblogs_Highlighter)>pre:not([highlighted]):not([class*="brush:"]) code:not(.hljs) {background: rgb(245, 245, 245);
+        padding: 12px;
+        border: 1px solid rgb(204, 204, 204);
+        border-radius: 3px;
+        border-color: transparent;
+        color: rgb(68, 68, 68);
+        font-family: "Courier New", sans-serif;
+        font-size: 12px</style><link rel="stylesheet" href="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/blog-common.min.css">
+    
+
+    <link id="MainCss" rel="stylesheet" href="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/bundle-codinglife.min.css">
+        <link id="highlighter-theme-cnblogs" type="text/css" rel="stylesheet" href="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/cnblogs.css">
+    
+    
+    <link id="mobile-style" media="only screen and (max-width: 767px)" type="text/css" rel="stylesheet" href="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/bundle-codinglife-mobile.min.css">
+    
+    <link type="application/rss+xml" rel="alternate" href="https://www.cnblogs.com/taotaozhuanyong/rss">
+    <link type="application/rsd+xml" rel="EditURI" href="https://www.cnblogs.com/taotaozhuanyong/rsd.xml">
+    <link type="application/wlwmanifest+xml" rel="wlwmanifest" href="https://www.cnblogs.com/taotaozhuanyong/wlwmanifest.xml">
+    <script type="text/javascript" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/encoder.js"></script><script>
+        var currentBlogId = 523143;
+        var currentBlogApp = 'taotaozhuanyong';
+        var isLogined = true;
+        var isBlogOwner = false;
+        var skinName = 'CodingLife';
+        var visitorUserId = '6dbbf76d-186b-45fb-9916-08d6822e67f8';
+        var hasCustomScript = false;
+        try {
+            if (hasCustomScript && document.referrer && document.referrer.indexOf('baidu.com') >= 0) {
+                Object.defineProperty(document, 'referrer', { value: '' });
+                Object.defineProperty(Document.prototype, 'referrer', { get: function () { return ''; } });
+            }
+        } catch (error) { }
+        window.cb_enable_mathjax = false;
+        window.mathEngine = 0;
+        window.codeHighlightEngine = 1;
+        window.enableCodeLineNumber = false;
+        window.codeHighlightTheme = 'cnblogs';
+        window.darkModeCodeHighlightTheme = 'vs2015';
+        window.isDarkCodeHighlightTheme = false;
+        window.isDarkModeCodeHighlightThemeDark = true;
+        window.isDisableCodeHighlighter = false;
+        window.enableCodeThemeTypeFollowSystem = false;
+        window.enableMacStyleCodeBlock = false
+    </script>
+        <script>
+            var currentPostDateAdded = '2022-09-13 12:07';
+        </script>
+    <script src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/jquery-2.2.0.min.js"></script>
+    <script src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/blog-common.min.js"></script><style>.medium-zoom-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  transition: opacity 300ms;
+  will-change: opacity;
+}
+
+.medium-zoom--opened .medium-zoom-overlay {
+  cursor: pointer;
+  cursor: zoom-out;
+  opacity: 1;
+}
+
+.medium-zoom-image {
+  cursor: pointer;
+  cursor: zoom-in;
+  /*
+    The `transition` is marked as "!important" for the animation to happen
+    even though it's overriden by another inline `transition` style attribute.
+
+    This is problematic with frameworks that generate inline styles on their
+    images (e.g. Gatsby).
+
+    See https://github.com/francoischalifour/medium-zoom/issues/110
+   */
+  transition: transform 300ms cubic-bezier(0.2, 0, 0.2, 1) !important;
+}
+
+.medium-zoom-image--hidden {
+  visibility: hidden;
+}
+
+.medium-zoom-image--opened {
+  position: relative;
+  cursor: pointer;
+  cursor: zoom-out;
+  will-change: transform;
+}
+</style><script id="hljs-script" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/highlight.min.js" type="text/javascript" async=""></script>
+    
+
+    
+<meta property="og:image" content="https://img2022.cnblogs.com/blog/1391054/202209/1391054-20220913113913667-1365145881.png"><style data-id="immersive-translate-input-injected-css">.immersive-translate-input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 2147483647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.immersive-translate-input-loading {
+  --loading-color: #f78fb6;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: block;
+  margin: 12px auto;
+  position: relative;
+  color: white;
+  left: -100px;
+  box-sizing: border-box;
+  animation: immersiveTranslateShadowRolling 1.5s linear infinite;
+}
+
+@keyframes immersiveTranslateShadowRolling {
+  0% {
+    box-shadow: 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  12% {
+    box-shadow: 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  25% {
+    box-shadow: 110px 0 var(--loading-color), 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  36% {
+    box-shadow: 120px 0 var(--loading-color), 110px 0 var(--loading-color), 100px 0 var(--loading-color), 0px 0 rgba(255, 255, 255, 0);
+  }
+
+  50% {
+    box-shadow: 130px 0 var(--loading-color), 120px 0 var(--loading-color), 110px 0 var(--loading-color), 100px 0 var(--loading-color);
+  }
+
+  62% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color), 120px 0 var(--loading-color), 110px 0 var(--loading-color);
+  }
+
+  75% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color), 120px 0 var(--loading-color);
+  }
+
+  87% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 130px 0 var(--loading-color);
+  }
+
+  100% {
+    box-shadow: 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0), 200px 0 rgba(255, 255, 255, 0);
+  }
+}
+
+
+.immersive-translate-search-recomend {
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  position: relative;
+  font-size: 16px;
+}
+.immersive-translate-search-enhancement-en-title {
+  color: #4d5156;
+}
+/* dark */
+@media (prefers-color-scheme: dark) {
+  .immersive-translate-search-recomend {
+    border: 1px solid #3c4043;
+  }
+  .immersive-translate-close-action svg {
+    fill: #bdc1c6;
+  }
+
+.immersive-translate-search-enhancement-en-title {
+  color: #bdc1c6;
+}
+}
+
+
+.immersive-translate-search-settings {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  cursor: pointer;
+}
+
+.immersive-translate-search-recomend::before {
+  /* content: " "; */
+  /* width: 20px; */
+  /* height: 20px; */
+  /* top: 16px; */
+  /* position: absolute; */
+  /* background: center / contain url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAxlBMVEUAAADpTInqTIjpSofnSIfqS4nfS4XqS4nqTIjsTYnrTInqTIroS4jvQIDqTIn////+/v7rSYjpTIn8/v7uaZzrTIr9/f3wfansWJL88/b85e73qc39+/v3xNnylrvrVI/98fb62Obva5/8+fr76vH4y9zpSIj74e353Oj1ocTzm77xhK/veKbtYpjsXJTqU47oTInxjrXyh7L99fj40eH2ttH1udD3sc31ssz1rMnykLXucqPtbqD85e/1xdn2u9DzqcXrUY6FaJb8AAAADnRSTlMA34BgIM8Q37/fz7+/EGOHcVQAAAGhSURBVDjLhZPncuowEEZFTW7bXVU7xsYYTO/p7bb3f6lICIOYJOT4h7/VnFmvrBFjrF3/CR/SajBHswafctG0Qg3O8O0Xa8BZ6uw7eLjqr30SofCDVSkemMinfL1ecy20r5ygR5zz3ArcAqJExPTPKhDENEmS30Q9+yo4lEQkqVTiIEAHCT10xWERRdH0Bq0aCOPZNDV3s0xaYce1lHEoDHU8wEh3qRJypNcTAeKUIjgKMeGLDoRCLVLTVf+Ownj8Kk6H9HM6QXPgYjQSB0F00EJEu10ILQrs/QeP77BSSr0MzLOyuJJQbnUoOOIUI/A8EeJk9E4YUHUWiRyTVKGgQUB8/3e/NpdGlfI+FMQyWsCBWyz4A/ZyHXyiiz0Ne5aGZssoxRmcChw8/EFKQ5JwwkUo3FRT5yXS7q+Y/rHDZmFktzpGMvO+5QofA4FPpEmGw+EWRCFvnaof7Zhe8NuYSLR0xErKLThUSs8gnODh87ssy6438yzbLzxl012HS19vfCf3CNhnbWOL1eEsDda+gDPUvri8tSZzNFrwIZf1NmNvqC1I/t8j7nYAAAAASUVORK5CYII='); */
+}
+
+.immersive-translate-search-title {}
+
+.immersive-translate-search-title-wrapper {}
+
+.immersive-translate-search-time {
+  font-size: 12px;
+  margin: 4px 0 24px;
+  color: #70757a;
+}
+
+.immersive-translate-expand-items {
+  display: none;
+}
+
+.immersive-translate-search-more {
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.immersive-translate-modal {
+  display: none;
+  position: fixed;
+  z-index: 1000000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+  font-size:15px;
+}
+
+.immersive-translate-modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  font-family: system-ui, -apple-system, "Segoe UI", "Roboto", "Ubuntu",
+    "Cantarell", "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.immersive-translate-modal-title {
+  font-size: 1.3rem;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: hsl(205, 20%, 32%);
+}
+
+.immersive-translate-modal-body {
+  color: hsl(205, 20%, 32%)
+}
+
+.immersive-translate-close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.immersive-translate-close:hover,
+.immersive-translate-close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.immersive-translate-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.immersive-translate-btn {
+  color: #fff;
+  background-color: #ea4c89;
+  border: none;
+  font-size: 14px;
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.immersive-translate-cancel-btn {
+  /* gray color */
+  background-color: rgb(89, 107, 120);
+}
+
+.immersive-translate-btn:hover {
+  background-color: #f082ac;
+}
+
+.immersive-translate-cancel-btn:hover {
+  background-color: hsl(205, 20%, 32%);
+}
+
+
+.immersive-translate-btn svg {
+  margin-right: 5px;
+}
+
+.immersive-translate-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #007bff;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, .1);
+}
+
+.immersive-translate-primary-link {
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-drag: none;
+  text-decoration: none;
+  color: #ea4c89;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, .1);
+}
+
+.immersive-translate-modal input[type="radio"] {
+  margin: 0 6px;
+  cursor: pointer;
+}
+
+.immersive-translate-modal label {
+  cursor: pointer;
+}
+
+.immersive-translate-close-action {
+  position: absolute;
+  top: 2px;
+  right: 0px;
+  cursor: pointer;
+}
+</style></head>
+<body class="skin-codinglife has-navbar has-bannerbar">
+    <a name="top"></a>
+        <a href="https://developer.aliyun.com/topic/aiforgames?utm_content=g_1000380884" onclick="countCreativeClicks(&#39;C0-阿里云-亚运活动&#39;)" target="_blank" rel="nofollow">
+            <div class="bannerbar forpc" style="background-size: contain;background-image: url(https://img2023.cnblogs.com/blog/35695/202309/35695-20230923225406161-1121341447.jpg);">
+                <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/35695-20230923225227125-1421999073.jpg" onload="countCreativeImpressions(&#39;C0-阿里云-亚运活动&#39;)">
+                
+                <span id="c0_impression" style="display:none"></span>
+            </div>
+        </a>
+        <div id="bannerbar" class="bannerbar-mobile bannerbar-text-mobile formobile">
+                <a href="https://developer.aliyun.com/topic/aiforgames?utm_content=g_1000380884" onclick="countCreativeClicks(&#39;M2-阿里云-亚运活动&#39;)" rel="nofollow">
+                    <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/35695-20230923232109924-2049928655.jpg" alt="" onload="countCreativeImpressionsOnMobile(&#39;M2-阿里云-亚运活动&#39;)">
+                    <span id="m2_impression" style="display:none"></span>
+                </a>
+        </div>
+    <div id="top_nav" class="navbar forpc">
+        <nav id="nav_main" class="navbar-main">
+            <ul id="nav_left" class="navbar-list navbar-left">
+                <li class="navbar-branding">
+                    <a href="https://www.cnblogs.com/" title="开发者的网上家园" role="banner">
+                        <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/logo.svg" alt="博客园Logo">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://www.cnblogs.com/" onclick="countClicks(&#39;skin-navbar-sitehome&#39;)">首页</a>
+                </li>
+                <li>
+                    <a href="https://news.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-news&#39;)">新闻</a>
+                </li>
+                <li>
+                    <a href="https://q.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-q&#39;)">博问</a>
+                </li>
+                <li><a href="https://cnblogs.vip/">会员</a></li>
+                    <li><a href="https://www.cnblogs.com/cmt/p/17725731.html">视频</a></li>
+                <li>
+                    <a href="https://ing.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-ing&#39;)">闪存</a>
+                </li>
+                <li>
+                    <a href="https://edu.cnblogs.com/" onclick="countClicks(&#39;nav&#39;, &#39;skin-navbar-edu&#39;)">班级</a>
+                </li>
+            </ul>
+            <ul id="nav_right" class="navbar-list navbar-right">
+                <li>
+                    <form id="zzk_search" class="navbar-search dropdown" action="https://zzk.cnblogs.com/s" method="get" role="search">
+                        <input name="w" id="zzk_search_input" placeholder="代码改变世界" type="search" tabindex="3" autocomplete="off">
+                        <button id="zzk_search_button" onclick="window.navbarSearchManager.triggerActiveOption()">
+                            <img id="search_icon" class="focus-hidden" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/search.svg" alt="搜索">
+                            <img class="hidden focus-visible" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/enter.svg" alt="搜索">
+                        </button>
+                        <ul id="navbar_search_options" class="dropdown-menu quick-search-menu">
+                            <li tabindex="0" class="active" onclick="zzkSearch(event, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                <div class="keyword-wrapper">
+                                    <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/search.svg" alt="搜索">
+                                    <div class="keyword"></div>
+                                </div>
+                                <span class="search-area">所有博客</span>
+                            </li>
+                                    <li tabindex="1" onclick="zzkBlogSearch(event, &#39;taotaozhuanyong&#39;, document.getElementById(&#39;zzk_search_input&#39;).value)">
+                                        <div class="keyword-wrapper">
+                                            <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/search.svg" alt="搜索">
+                                            <div class="keyword"></div>
+                                        </div>
+                                        <span class="search-area">当前博客</span>
+                                    </li>
+                        </ul>
+                    </form>
+                </li>
+                <li id="navbar_login_status" class="navbar-list">
+                    <a class="navbar-user-info navbar-blog" href="https://i.cnblogs.com/EditPosts.aspx?opt=1" alt="写随笔" title="写随笔" style="display: inline;">
+                        <img id="new_post_icon" class="navbar-icon" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/newpost.svg" alt="写随笔">
+                    </a>
+                    <a id="navblog-myblog-icon" class="navbar-user-info navbar-blog" href="https://account.cnblogs.com/blog-apply" alt="我的博客" title="我的博客" style="display: inline;">
+                        <img id="myblog_icon" class="navbar-icon" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/myblog.svg" alt="我的博客">
+                    </a>
+                    <a class="navbar-user-info navbar-message navbar-icon-wrapper" href="https://msg.cnblogs.com/" alt="短消息" title="短消息" style="display: inline;">
+                        <img id="msg_icon" class="navbar-icon" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/message.svg" alt="短消息">
+                        <span id="msg_count" style="display: none"></span>
+                    </a>
+                    <a id="navbar_lite_mode_indicator" data-current-page="blog" style="display: none" href="javascript:void(0)" alt="简洁模式" title="简洁模式启用，您在访问他人博客时会使用简洁款皮肤展示">
+                        <img class="navbar-icon" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/lite-mode-on.svg" alt="简洁模式">
+                    </a>
+                    <div id="user_info" class="navbar-user-info dropdown" style="display: block;">
+                        <a class="dropdown-button" href="https://home.cnblogs.com/u/1595265">
+                            <img id="user_icon" class="navbar-avatar" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/default-avatar.png" alt="用户头像">
+                        </a>
+                        <div class="dropdown-menu">
+                            <a id="navblog-myblog-text" href="https://account.cnblogs.com/blog-apply">我的博客</a>
+                            <a href="https://home.cnblogs.com/">我的园子</a>
+                            <a href="https://account.cnblogs.com/settings/account">账号设置</a>
+                            <a href="javascript:void(0)" id="navbar_lite_mode_toggle" title="简洁模式会使用简洁款皮肤显示所有博客">
+    简洁模式 <img id="navbar_lite_mode_on" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/lite-mode-check.svg" class="hide" style="display: none;"><span id="navbar_lite_mode_spinner" class="hide">...</span>
+</a>
+                            <a href="javascript:void(0)" onclick="account.logout();">退出登录</a>
+                        </div>
+                    </div>
+                    <a class="navbar-anonymous" href="https://account.cnblogs.com/signup" style="display: none;">注册</a>
+                    <a class="navbar-anonymous" href="javascript:void(0);" onclick="account.login()" style="display: none;">登录</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+    
+
+    <!--done-->
+<div id="home">
+<div id="header">
+	<div id="blogTitle">
+        <a id="lnkBlogLogo" href="https://www.cnblogs.com/taotaozhuanyong/"><img id="blogLogo" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/logo.gif" alt="返回主页"></a>		
+		
+<!--done-->
+<h1><a id="Header1_HeaderTitle" class="headermaintitle HeaderMainTitle" href="https://www.cnblogs.com/taotaozhuanyong/">冰乐</a>
+</h1>
+<h2>我亦无他，惟手熟尔！</h2>
+
+
+
+
+		
+	</div><!--end: blogTitle 博客的标题和副标题 -->
+	<div id="navigator">
+		
+<ul id="navList">
+<li><a id="blog_nav_sitehome" class="menu" href="https://www.cnblogs.com/">
+博客园</a>
+</li>
+<li>
+<a id="blog_nav_myhome" class="menu" href="https://www.cnblogs.com/taotaozhuanyong/">
+首页</a>
+</li>
+<li>
+
+<a id="blog_nav_newpost" class="menu" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">
+新随笔</a>
+</li>
+<li>
+<a id="blog_nav_contact" class="menu" href="https://msg.cnblogs.com/send/%E5%86%B0%E4%B9%90">
+联系</a></li>
+<li>
+<a id="blog_nav_rss" class="menu" href="javascript:void(0)" data-rss="https://www.cnblogs.com/taotaozhuanyong/rss/">订阅</a>
+<!--<partial name="./Shared/_XmlLink.cshtml" model="Model" /></li>--></li>
+<li>
+<a id="blog_nav_admin" class="menu" href="https://i.cnblogs.com/">
+管理</a>
+</li>
+</ul>
+
+
+		<div class="blogStats">
+			<span id="stats_post_count">随笔 - 121&nbsp; </span>
+<span id="stats_article_count">文章 - 0&nbsp; </span>
+<span id="stats-comment_count">评论 - 62&nbsp; </span>
+<span id="stats-total-view-count">阅读 - 
+<span title="总阅读数: 427915">
+42万</span></span>
+
+		</div><!--end: blogStats -->
+	</div><!--end: navigator 博客导航栏 -->
+</div><!--end: header 头部 -->
+<div id="main">
+	<div id="mainContent">
+	<div class="forFlow">
+		<div id="post_detail">
+    <!--done-->
+    <div id="topics">
+        <div class="post">
+            <h1 class="postTitle">
+                
+<a id="cb_post_title_url" class="postTitle2 vertical-middle" href="https://www.cnblogs.com/taotaozhuanyong/p/16688643.html">
+    <span role="heading" aria-level="2">Golang使用前缀树算法实现敏感词过滤</span>
+    
+
+
+
+</a><button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button>
+
+            </h1>
+            <div class="clear"></div>
+            <div class="postBody">
+                <div id="cnblogs_post_body" class="blogpost-body blogpost-body-html">
+<p>大家都知道游戏文字、文章等一些风控场景都实现了敏感词检测，一些敏感词会被屏蔽掉或者文章无法发布。打游戏的时候不要骂人，骂人是不对的，但有时候无奈化身为肖邦。</p>
+<p>今天我就分享用Go实现敏感词前缀树来达到文本的敏感词检测，让我们一探究竟！</p>
+<h3 id="438q11" class="markdown-heading">敏感词检测<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<p>实现敏感词检测都很多种方法，例如暴力、正则、前缀树等。例如一个游戏的文字交流的场景，敏感词会被和谐成 * ，该如何实现呢？首先我们先准备一些敏感词如下：</p>
+<div class="cnblogs_code">
+<pre>sensitiveWords := []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+}</span></pre>
+</div>
+<p>由于文章审核原因敏感词就换成别的了，大家能理解意思就行。</p>
+<p>当在游戏中输入&nbsp;<strong><code>什么垃圾打野，傻逼一样，叫你来开龙不来，sb</code>，</strong> 该如何检测其中的敏感词并和谐掉</p>
+<h4 id="13zdxp" class="markdown-heading">暴力匹配<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<div class="cnblogs_code">
+<pre>sensitiveWords := []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+}
+text :</span>= <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃圾打野，傻逼一样，叫你来开龙不来，sb</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+
+<span style="color: rgba(0, 0, 255, 1)">for</span> _, word :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveWords {
+   text </span>= strings.Replace(text, word, <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">*</span><span style="color: rgba(128, 0, 0, 1)">"</span>, -<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">)
+}
+
+println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">text -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, text)</pre>
+</div>
+<p>这样采用的Go的内置的字符串替换的方法来进行暴力替换结果如下：</p>
+<div class="cnblogs_code">
+<pre>text -&gt;  什么*打野，*一样，叫你来开龙不来，*</pre>
+</div>
+<p>但暴力替换的时间复杂度太高了O（N^2），不建议这样，而且和谐的字符只有一个 *，感觉像屏蔽了一个字一样，因此改造一下并引出go中的&nbsp;<code>rune</code>&nbsp;类型。</p>
+<div class="cnblogs_code">
+<pre>sensitiveWords := []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+}
+text :</span>= <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃圾打野，傻逼一样，叫你来开龙不来，sb</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+
+<span style="color: rgba(0, 0, 255, 1)">for</span> _, word :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveWords {
+   replaceChar :</span>= <span style="color: rgba(128, 0, 0, 1)">""</span>
+   <span style="color: rgba(0, 0, 255, 1)">for</span> i, wordLen := <span style="color: rgba(128, 0, 128, 1)">0</span>, len(word); i &lt; wordLen; i++<span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 根据敏感词的长度构造和谐字符</span>
+      replaceChar += <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">*</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">
+   }
+   text </span>= strings.Replace(text, word, replaceChar, -<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">)
+}
+
+println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">text -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, text)</pre>
+</div>
+<p>&nbsp;输出如下：</p>
+<div class="cnblogs_code">
+<pre>text -&gt;  什么******打野，******一样，叫你来开龙不来，**</pre>
+</div>
+<p>为什么中文的和谐字符多了这么？*</p>
+<p>因为Go中默认采用utf-8来进行中文字符编码，因此一个中文字符要占3个字节</p>
+<p><img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/1391054-20220913113913667-1365145881.png" alt="" loading="lazy" class="medium-zoom-image"></p>
+<p>&nbsp;</p>
+<p>&nbsp;<img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/1391054-20220913113942491-115780637.png" alt="" loading="lazy" class="medium-zoom-image"></p>
+<p>&nbsp;</p>
+<p>&nbsp;因此引出 Go 中的 rune 类型，它可以代表一个字符编码的int32的表现形式，就是说一个字符用一个数字唯一标识。有点像 ASCII 码一样 a =&gt; 97， A =&gt; 65</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">源码解释如下
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> rune is an alias for int32 and is equivalent to int32 in all ways. It is</span>
+used, by convention, to distinguish character values <span style="color: rgba(0, 0, 255, 1)">from</span><span style="color: rgba(0, 0, 0, 1)"> integer values.
+type rune </span>= int32</pre>
+</div>
+<div class="cnblogs_code">
+<pre>    fmt.Println(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">a -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, rune(<span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(128, 0, 0, 1)">a</span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(0, 0, 0, 1)">))
+    fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">A -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, rune(<span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(128, 0, 0, 1)">A</span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(0, 0, 0, 1)">))
+
+    fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">晖 -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, rune(<span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(128, 0, 0, 1)">晖</span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(0, 0, 0, 1)">))
+    fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">霞 -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, rune(<span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(128, 0, 0, 1)">霞</span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(0, 0, 0, 1)">))
+
+    fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">晖霞 -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, []rune(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">晖霞</span><span style="color: rgba(128, 0, 0, 1)">"</span>))</pre>
+</div>
+<p>输出如下：</p>
+<div class="cnblogs_code">
+<pre>a -&gt;  <span style="color: rgba(128, 0, 128, 1)">97</span><span style="color: rgba(0, 0, 0, 1)">
+A </span>-&gt;  <span style="color: rgba(128, 0, 128, 1)">65</span><span style="color: rgba(0, 0, 0, 1)">              
+晖 </span>-&gt;  <span style="color: rgba(128, 0, 128, 1)">26198</span><span style="color: rgba(0, 0, 0, 1)">          
+霞 </span>-&gt;  <span style="color: rgba(128, 0, 128, 1)">38686</span><span style="color: rgba(0, 0, 0, 1)">          
+晖霞 </span>-&gt;  [<span style="color: rgba(128, 0, 128, 1)">26198</span> <span style="color: rgba(128, 0, 128, 1)">38686</span>]</pre>
+</div>
+<p>因此将敏感词字符串转换成rune类型的数组然后来计算其字符个数</p>
+<div class="cnblogs_code">
+<pre>sensitiveWords := []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+}
+text :</span>= <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃圾打野，傻逼一样，叫你来开龙不来，sb</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+
+<span style="color: rgba(0, 0, 255, 1)">for</span> _, word :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveWords {
+   replaceChar :</span>= <span style="color: rgba(128, 0, 0, 1)">""</span>
+
+   <span style="color: rgba(0, 0, 255, 1)">for</span> i, wordLen := <span style="color: rgba(128, 0, 128, 1)">0</span>, len([]rune(word)); i &lt; wordLen; i++<span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 根据敏感词的长度构造和谐字符</span>
+      replaceChar += <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">*</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">
+   }
+   text </span>= strings.Replace(text, word, replaceChar, -<span style="color: rgba(128, 0, 128, 1)">1</span><span style="color: rgba(0, 0, 0, 1)">)
+}
+
+println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">text -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, text)</pre>
+</div>
+<p>输出如下：</p>
+<div class="cnblogs_code">
+<pre>text -&gt;  什么**打野，**一样，叫你来开龙不来，**</pre>
+</div>
+<h4 id="7qti2a" class="markdown-heading">正则匹配<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>&nbsp;</p>
+<div class="cnblogs_code">
+<pre>    sensitiveWords := []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+    }
+    text :</span>= <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃圾打野，傻逼一样，叫你来开龙不来，sb</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+
+    <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 构造正则匹配字符</span>
+    regStr := strings.Join(sensitiveWords, <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">|</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+    println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">regStr -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, regStr)
+    wordReg :</span>=<span style="color: rgba(0, 0, 0, 1)"> regexp.MustCompile(regStr)
+    text </span>= wordReg.ReplaceAllString(text, <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">*</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+
+    println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">text -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, text)    </pre>
+</div>
+<p>输出如下：</p>
+<div class="cnblogs_code">
+<pre>regStr -&gt;  傻逼|傻叉|垃圾|妈的|<span style="color: rgba(0, 0, 0, 1)">sb           
+text   </span>-&gt;  什么*打野，*一样，叫你来开龙不来，*</pre>
+</div>
+<p>再优化下：</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">package main
+
+import (
+    </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">fmt</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+    <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">regexp</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+    <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">strings</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">
+)
+
+func main() {
+    sensitiveWords :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+    }
+    matchContents :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃圾打野，傻逼一样，叫你来开龙不来，sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+    }
+
+    regDemo(sensitiveWords, matchContents)
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 正则匹配敏感词</span>
+func regDemo(sensitiveWords []<span style="color: rgba(0, 0, 255, 1)">string</span>, matchContents []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+
+    banWords :</span>= make([]<span style="color: rgba(0, 0, 255, 1)">string</span>, <span style="color: rgba(128, 0, 128, 1)">0</span>) <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 收集匹配到的敏感词
+
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 构造正则匹配字符</span>
+    regStr := strings.Join(sensitiveWords, <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">|</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+    wordReg :</span>=<span style="color: rgba(0, 0, 0, 1)"> regexp.MustCompile(regStr)
+    println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">regStr -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, regStr)
+
+    </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, text :=<span style="color: rgba(0, 0, 0, 1)"> range matchContents {
+        textBytes :</span>= wordReg.ReplaceAllFunc([]<span style="color: rgba(0, 0, 255, 1)">byte</span>(text), func(bytes []<span style="color: rgba(0, 0, 255, 1)">byte</span>) []<span style="color: rgba(0, 0, 255, 1)">byte</span><span style="color: rgba(0, 0, 0, 1)"> {
+            banWords </span>= append(banWords, <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">(bytes))
+            textRunes :</span>= []rune(<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">(bytes))
+            replaceBytes :</span>= make([]<span style="color: rgba(0, 0, 255, 1)">byte</span>, <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">)
+            </span><span style="color: rgba(0, 0, 255, 1)">for</span> i, runeLen := <span style="color: rgba(128, 0, 128, 1)">0</span>, len(textRunes); i &lt; runeLen; i++<span style="color: rgba(0, 0, 0, 1)"> {
+                replaceBytes </span>= append(replaceBytes, <span style="color: rgba(0, 0, 255, 1)">byte</span>(<span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(128, 0, 0, 1)">*</span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(0, 0, 0, 1)">))
+            }
+            </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> replaceBytes
+        })
+        fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">srcText        -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, text)
+        fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">replaceText    -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span>, <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">(textBytes))
+        fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sensitiveWords -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, banWords)
+    }
+}</span></pre>
+</div>
+<p>输出如下：</p>
+<div class="cnblogs_code">
+<pre>regStr -&gt;  傻逼|傻叉|垃圾|妈的|<span style="color: rgba(0, 0, 0, 1)">sb                            
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  什么垃圾打野，傻逼一样，叫你来开龙不来，sb
+replaceText    </span>-&gt;  什么**打野，**一样，叫你来开龙不来，**<span style="color: rgba(0, 0, 0, 1)">    
+sensitiveWords </span>-&gt;  [垃圾 傻逼 sb]</pre>
+</div>
+<p>这里是通过敏感词去构造正则表达式然后再去匹配。</p>
+<p>本文重点是使用Go实现前缀树完成敏感词的匹配，具体细节都在这里实现。</p>
+<h3 id="comolb" class="markdown-heading">Golang 实现敏感词前缀树<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h3>
+<h4 id="c07mc1" class="markdown-heading">前缀树结构<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>前缀树、也称字典树（Trie），是N叉树的一种特殊形式，前缀树的每一个节点代表一个字符串（前缀）。每一个节点会有多个子节点，通往不同子节点的路径上有着不同的字符。子节点代表的字符串是由节点本身的原始字符串，以及通往该子节点路径上所有的字符组成的。</p>
+<p><img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/1391054-20220913114812366-2007476185.png" alt="" loading="lazy" class="medium-zoom-image"></p>
+<p>&nbsp;</p>
+<p>&nbsp;如上图所示，就是一颗前缀树，注意前缀树的根节点不存数据。那么我们该如何表示一颗前缀树呢？</p>
+<p>可以参考一下二叉树的节点结构</p>
+<div class="cnblogs_code">
+<pre>type BinTreeNode <span style="color: rgba(0, 0, 255, 1)">struct</span><span style="color: rgba(0, 0, 0, 1)"> {
+   Val        </span><span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">
+   LeftChild  </span>*<span style="color: rgba(0, 0, 0, 1)">BinTreeNode
+   RightChild </span>*<span style="color: rgba(0, 0, 0, 1)">BinTreeNode
+}</span></pre>
+</div>
+<p>二叉树，一个节点最多只能有两个孩子节点，非常明确，而前缀是一颗多叉树，一个节点不确定有多少子节点，因此可以用 切片<strong><code>Slice</code>、<code>Map</code>&nbsp;</strong>来存储子节点，然后一般会设置标志位&nbsp;<strong><code>End&nbsp;</code></strong>来标识是否是字符串的最后一个节点。结构如下</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> TrieNode 敏感词前缀树节点</span>
+type TrieNode <span style="color: rgba(0, 0, 255, 1)">struct</span><span style="color: rgba(0, 0, 0, 1)"> {
+   childMap map[rune]</span>*TrieNode <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 本节点下的所有子节点</span>
+   Data     <span style="color: rgba(0, 0, 255, 1)">string</span>             <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 在最后一个节点保存完整的一个内容</span>
+   End      <span style="color: rgba(0, 0, 255, 1)">bool</span>               <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 标识是否最后一个节点</span>
+}</pre>
+</div>
+<p>这里采用 Map 来存储子节点，更方便找字节点。key是rune类型（字符），value是子节点。Data则是在最后一个节点保存完整的一个内容。</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> SensitiveTrie 敏感词前缀树</span>
+type SensitiveTrie <span style="color: rgba(0, 0, 255, 1)">struct</span><span style="color: rgba(0, 0, 0, 1)"> {
+   replaceChar rune </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 敏感词替换的字符</span>
+   root        *<span style="color: rgba(0, 0, 0, 1)">TrieNode
+}</span></pre>
+</div>
+<p>这里再用另一个结构体来代表整个敏感词前缀树。</p>
+<h4 id="d2ol1e" class="markdown-heading">添加敏感词<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>添加敏感词用于构造一颗敏感词前缀树。</p>
+<p>相对每个节点来说<code>childMap</code>都是保存<code>相同前缀</code>字符的子节点</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> AddChild 前缀树添加</span>
+func (tn *TrieNode) AddChild(c rune) *<span style="color: rgba(0, 0, 0, 1)">TrieNode {
+
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> tn.childMap ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+      tn.childMap </span>= make(map[rune]*<span style="color: rgba(0, 0, 0, 1)">TrieNode)
+   }
+
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> trieNode, ok :=<span style="color: rgba(0, 0, 0, 1)"> tn.childMap[c]; ok {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 存在不添加了</span>
+      <span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> trieNode
+   } </span><span style="color: rgba(0, 0, 255, 1)">else</span><span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 不存在</span>
+      tn.childMap[c] = &amp;<span style="color: rgba(0, 0, 0, 1)">TrieNode{
+         childMap: nil,
+         End:      </span><span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">,
+      }
+      </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> tn.childMap[c]
+   }
+}</span></pre>
+</div>
+<p>敏感词前缀树则是一个完整的敏感词的粒度来添加</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> AddWord 添加敏感词</span>
+func (st *SensitiveTrie) AddWord(sensitiveWord <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 将敏感词转换成rune类型(int32)</span>
+   tireNode :=<span style="color: rgba(0, 0, 0, 1)"> st.root
+   sensitiveChars :</span>=<span style="color: rgba(0, 0, 0, 1)"> []rune(sensitiveWord)
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, charInt :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveChars {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 添加敏感词到前缀树中</span>
+      tireNode =<span style="color: rgba(0, 0, 0, 1)"> tireNode.AddChild(charInt)
+   }
+   tireNode.End </span>= <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">
+   tireNode.Data </span>=<span style="color: rgba(0, 0, 0, 1)"> sensitiveWord
+}</span></pre>
+</div>
+<p>具体是把敏感词转换成&nbsp;<code>[]rune&nbsp;</code>类型来代表敏感词中的一个个<code>字符</code>，添加完后再将最后一个字符节点的 End 设置True，Data为完整的敏感词数据。</p>
+<p>可能这样还不好理解，举个例子：</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">package main
+
+import </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">fmt</span><span style="color: rgba(128, 0, 0, 1)">"</span>
+
+<span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> SensitiveTrie 敏感词前缀树</span>
+type SensitiveTrie <span style="color: rgba(0, 0, 255, 1)">struct</span><span style="color: rgba(0, 0, 0, 1)"> {
+    replaceChar rune </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 敏感词替换的字符</span>
+    root        *<span style="color: rgba(0, 0, 0, 1)">TrieNode
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> TrieNode 敏感词前缀树节点</span>
+type TrieNode <span style="color: rgba(0, 0, 255, 1)">struct</span><span style="color: rgba(0, 0, 0, 1)"> {
+    childMap map[rune]</span>*TrieNode <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 本节点下的所有子节点</span>
+    Data     <span style="color: rgba(0, 0, 255, 1)">string</span>             <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 在最后一个节点保存完整的一个内容</span>
+    End      <span style="color: rgba(0, 0, 255, 1)">bool</span>               <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 标识是否最后一个节点</span>
+<span style="color: rgba(0, 0, 0, 1)">}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> NewSensitiveTrie 构造敏感词前缀树实例</span>
+func NewSensitiveTrie() *<span style="color: rgba(0, 0, 0, 1)">SensitiveTrie {
+    </span><span style="color: rgba(0, 0, 255, 1)">return</span> &amp;<span style="color: rgba(0, 0, 0, 1)">SensitiveTrie{
+        replaceChar: </span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(128, 0, 0, 1)">*</span><span style="color: rgba(128, 0, 0, 1)">'</span><span style="color: rgba(0, 0, 0, 1)">,
+        root:        </span>&amp;TrieNode{End: <span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">},
+    }
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> AddWord 添加敏感词</span>
+func (st *SensitiveTrie) AddWord(sensitiveWord <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+
+    </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 将敏感词转换成utf-8编码后的rune类型(int32)</span>
+    tireNode :=<span style="color: rgba(0, 0, 0, 1)"> st.root
+    sensitiveChars :</span>=<span style="color: rgba(0, 0, 0, 1)"> []rune(sensitiveWord)
+    </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, charInt :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveChars {
+        </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 添加敏感词到前缀树中</span>
+        tireNode =<span style="color: rgba(0, 0, 0, 1)"> tireNode.AddChild(charInt)
+    }
+    tireNode.End </span>= <span style="color: rgba(0, 0, 255, 1)">true</span><span style="color: rgba(0, 0, 0, 1)">
+    tireNode.Data </span>=<span style="color: rgba(0, 0, 0, 1)"> sensitiveWord
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> AddChild 前缀树添加子节点</span>
+func (tn *TrieNode) AddChild(c rune) *<span style="color: rgba(0, 0, 0, 1)">TrieNode {
+
+    </span><span style="color: rgba(0, 0, 255, 1)">if</span> tn.childMap ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+        tn.childMap </span>= make(map[rune]*<span style="color: rgba(0, 0, 0, 1)">TrieNode)
+    }
+
+    </span><span style="color: rgba(0, 0, 255, 1)">if</span> trieNode, ok :=<span style="color: rgba(0, 0, 0, 1)"> tn.childMap[c]; ok {
+        </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 存在不添加了</span>
+        <span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> trieNode
+    } </span><span style="color: rgba(0, 0, 255, 1)">else</span><span style="color: rgba(0, 0, 0, 1)"> {
+        </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 不存在</span>
+        tn.childMap[c] = &amp;<span style="color: rgba(0, 0, 0, 1)">TrieNode{
+            childMap: nil,
+            End:      </span><span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">,
+        }
+        </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> tn.childMap[c]
+    }
+}
+
+func main() {
+    sensitiveWords :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+        </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+    }
+
+    st :</span>=<span style="color: rgba(0, 0, 0, 1)"> NewSensitiveTrie()
+    </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, word :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveWords {
+        fmt.Println(word, []rune(word))
+        st.AddWord(word)
+    }
+}</span></pre>
+</div>
+<p>输出如下：</p>
+<div class="cnblogs_code">
+<pre>傻逼 [<span style="color: rgba(128, 0, 128, 1)">20667</span> <span style="color: rgba(128, 0, 128, 1)">36924</span><span style="color: rgba(0, 0, 0, 1)">]
+傻叉 [</span><span style="color: rgba(128, 0, 128, 1)">20667</span> <span style="color: rgba(128, 0, 128, 1)">21449</span><span style="color: rgba(0, 0, 0, 1)">]
+垃圾 [</span><span style="color: rgba(128, 0, 128, 1)">22403</span> <span style="color: rgba(128, 0, 128, 1)">22334</span>]</pre>
+</div>
+<p>添加前两个敏感词傻逼、傻叉，有一个共同的前缀&nbsp;&nbsp;<code>傻、rune-&gt; 200667</code></p>
+<p>1.前缀的root是没有孩子节点，添加第一个敏感词时先转换成&nbsp;<code>[]rune（可以想象成字符数组）</code></p>
+<p>2.遍历rune字符数组，先判断有没有孩子节点（一开始root是没有的），没有就先构造，然后把&nbsp;<code>傻（200667）</code>存到 childMap中 key 为 傻(200667)，value 为 TrieNode 但没有任何数据然后返回当前新增的节点</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 0, 0, 1)">TrieNode{
+    childMap: nil
+    End:      </span><span style="color: rgba(0, 0, 255, 1)">false</span><span style="color: rgba(0, 0, 0, 1)">,
+}</span></pre>
+</div>
+<p>3.此时添加&nbsp;<code>逼（36924）</code>&nbsp;，同样做2的步骤，傻逼这个敏感词添加完成走出for循环，然后将&nbsp;<code>End=true、Data=傻逼</code>。</p>
+<p>&nbsp;<img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/1391054-20220913115543442-1728256989.png" alt="" loading="lazy" class="medium-zoom-image"></p>
+<p>&nbsp;</p>
+<p>&nbsp;4.添加第二个敏感词傻叉的时候又是从根节点开始，此时root有childMap，也存在傻（20667）节点，则是直接不添加把傻（20667）节点返回，然后再此节点上继续添加 叉（21449），不存在添加到傻节点的childMap中。</p>
+<p><img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/1391054-20220913115626193-901694699.png" alt="" loading="lazy" class="medium-zoom-image"></p>
+<p>&nbsp;</p>
+<p>5.添加第三个敏感词<code>垃 圾</code>，又从根节点开始，<code>垃（22403）</code>&nbsp;，根节点不存在该子节点，故添加到根节点的childMap中，然后返回新增的&nbsp;<code>垃（22403）</code>节点</p>
+<p>6.在垃节点基础上添加&nbsp;<code>圾（22334）</code>&nbsp;节点，不存在子节点则添加并返回。</p>
+<p><img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/1391054-20220913115707675-1696120437.png" alt="" loading="lazy" class="medium-zoom-image"></p>
+<p>&nbsp;</p>
+<p>由此一颗敏感词前缀树就构造出来了。</p>
+<p>小结：添加敏感词字符节点存在不添加返回存在的节点，不存在添加新字符节点并返回新添节点，当敏感词的所有字符都添加完毕后，让最后一个节点，End=true，存储一个完整的敏感词。</p>
+<h4 id="2deajj" class="markdown-heading">匹配敏感词<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>&nbsp;将待匹配的内容转换成<code>[]rune</code>类型，然后遍历寻找前缀树种第一个匹对的前缀节点，然后从后一个位置继续，直到完整匹配到了敏感词，将匹配文本的敏感词替换成 *</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> FindChild 前缀树寻找字节点</span>
+func (tn *TrieNode) FindChild(c rune) *<span style="color: rgba(0, 0, 0, 1)">TrieNode {
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> tn.childMap ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+      </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> nil
+   }
+
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> trieNode, ok :=<span style="color: rgba(0, 0, 0, 1)"> tn.childMap[c]; ok {
+      </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> trieNode
+   }
+   </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> nil
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> replaceRune 字符替换</span>
+func (st *SensitiveTrie) replaceRune(chars []rune, begin <span style="color: rgba(0, 0, 255, 1)">int</span>, end <span style="color: rgba(0, 0, 255, 1)">int</span><span style="color: rgba(0, 0, 0, 1)">) {
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> i := begin; i &lt; end; i++<span style="color: rgba(0, 0, 0, 1)"> {
+      chars[i] </span>=<span style="color: rgba(0, 0, 0, 1)"> st.replaceChar
+   }
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Match 查找替换发现的敏感词</span>
+func (st *SensitiveTrie) Match(text <span style="color: rgba(0, 0, 255, 1)">string</span>) (sensitiveWords []<span style="color: rgba(0, 0, 255, 1)">string</span>, replaceText <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> st.root ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+      </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> nil, text
+   }
+
+   textChars :</span>=<span style="color: rgba(0, 0, 0, 1)"> []rune(text)
+   textCharsCopy :</span>=<span style="color: rgba(0, 0, 0, 1)"> make([]rune, len(textChars))
+   copy(textCharsCopy, textChars)
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> i, textLen := <span style="color: rgba(128, 0, 128, 1)">0</span>, len(textChars); i &lt; textLen; i++<span style="color: rgba(0, 0, 0, 1)"> {
+      trieNode :</span>=<span style="color: rgba(0, 0, 0, 1)"> st.root.FindChild(textChars[i])
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span> trieNode ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+         </span><span style="color: rgba(0, 0, 255, 1)">continue</span><span style="color: rgba(0, 0, 0, 1)">
+      }
+
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 匹配到了敏感词的前缀，从后一个位置继续</span>
+      j := i + <span style="color: rgba(128, 0, 128, 1)">1</span>
+      <span style="color: rgba(0, 0, 255, 1)">for</span> ; j &lt; textLen &amp;&amp; trieNode != nil; j++<span style="color: rgba(0, 0, 0, 1)"> {
+         </span><span style="color: rgba(0, 0, 255, 1)">if</span><span style="color: rgba(0, 0, 0, 1)"> trieNode.End {
+            </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 完整匹配到了敏感词，将匹配的文本的敏感词替换成 *</span>
+<span style="color: rgba(0, 0, 0, 1)">            st.replaceRune(textCharsCopy, i, j)
+         }
+         trieNode </span>=<span style="color: rgba(0, 0, 0, 1)"> trieNode.FindChild(textChars[j])
+      }
+
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 文本尾部命中敏感词情况</span>
+      <span style="color: rgba(0, 0, 255, 1)">if</span> j == textLen &amp;&amp; trieNode != nil &amp;&amp;<span style="color: rgba(0, 0, 0, 1)"> trieNode.End {
+         </span><span style="color: rgba(0, 0, 255, 1)">if</span> _, ok := sensitiveMap[trieNode.Data]; !<span style="color: rgba(0, 0, 0, 1)">ok {
+            sensitiveWords </span>=<span style="color: rgba(0, 0, 0, 1)"> append(sensitiveWords, trieNode.Data)
+         }
+         sensitiveMap[trieNode.Data] </span>=<span style="color: rgba(0, 0, 0, 1)"> nil
+         st.replaceRune(textCharsCopy, i, textLen)
+      }
+   }
+
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> len(sensitiveWords) &gt; <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 有敏感词</span>
+      replaceText = <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">(textCharsCopy)
+   } </span><span style="color: rgba(0, 0, 255, 1)">else</span><span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 没有则返回原来的文本</span>
+      replaceText =<span style="color: rgba(0, 0, 0, 1)"> text
+   }
+
+   </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> sensitiveWords, replaceText
+}</span></pre>
+</div>
+<p>这样需要注意的是在内容的末尾匹配到了的敏感词处理，因为j+1后，会等于textLen的从而不进入for循环从而没有处理末尾，因此需要特殊处理下末尾情况。具体测试如下</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> AddWords 批量添加敏感词</span>
+func (st *SensitiveTrie) AddWords(sensitiveWords []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, sensitiveWord :=<span style="color: rgba(0, 0, 0, 1)"> range sensitiveWords {
+      st.AddWord(sensitiveWord)
+   }
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 前缀树匹配敏感词</span>
+func trieDemo(sensitiveWords []<span style="color: rgba(0, 0, 255, 1)">string</span>, matchContents []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+
+   trie :</span>=<span style="color: rgba(0, 0, 0, 1)"> NewSensitiveTrie()
+   trie.AddWords(sensitiveWords)
+
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, srcText :=<span style="color: rgba(0, 0, 0, 1)"> range matchContents {
+      matchSensitiveWords, replaceText :</span>=<span style="color: rgba(0, 0, 0, 1)"> trie.Match(srcText)
+      fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">srcText        -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, srcText)
+      fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">replaceText    -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, replaceText)
+      fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sensitiveWords -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, matchSensitiveWords)
+      fmt.Println()
+   }
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 动态添加</span>
+   trie.AddWord(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">牛大大</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+   content :</span>= <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">今天，牛大大去挑战灰大大了</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">
+   matchSensitiveWords, replaceText :</span>=<span style="color: rgba(0, 0, 0, 1)"> trie.Match(content)
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">srcText        -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, content)
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">replaceText    -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, replaceText)
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sensitiveWords -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, matchSensitiveWords)
+}
+
+
+func main() {
+   sensitiveWords :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   }
+   matchContents :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">你是一个大傻逼，大傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">你是傻☺叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">shabi东西</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">他made东西</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃圾打野，傻逼一样，叫你来开龙不来，SB</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">正常的内容☺</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   }
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">fmt.Println("--------- 普通暴力匹配敏感词 ---------")
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">normalDemo(sensitiveWords, matchContents)
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span>
+   <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">fmt.Println("\n--------- 正则匹配敏感词 ---------")
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)">regDemo(sensitiveWords, matchContents)</span>
+<span style="color: rgba(0, 0, 0, 1)">
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">\n--------- 前缀树匹配敏感词 ---------</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+   trieDemo(sensitiveWords, matchContents)
+
+}</span></pre>
+</div>
+<p>运行结果如下：</p>
+<div class="cnblogs_code">
+<pre>--------- 前缀树匹配敏感词 ---------<span style="color: rgba(0, 0, 0, 1)">
+srcText        </span>-&gt;  你是一个大傻&amp;<span style="color: rgba(0, 0, 0, 1)">逼，大傻 叉
+replaceText    </span>-&gt;  你是一个大傻&amp;<span style="color: rgba(0, 0, 0, 1)">逼，大傻 叉
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  []
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  你是傻☺叉
+replaceText    </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  你是傻☺叉
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  []
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  shabi东西
+replaceText    </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  shabi东西
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  []
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  他made东西
+replaceText    </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  他made东西
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  []
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  什么垃 圾打野，傻 逼一样，叫你来开龙不来，傻 逼东西，S B
+replaceText    </span>-&gt;  什么**打野，**一样，叫你来开龙不来，**<span style="color: rgba(0, 0, 0, 1)">
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  [垃圾 傻逼]
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  正常的内容☺
+replaceText    </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  正常的内容☺
+sensitiveWords </span>-&gt;  []</pre>
+</div>
+<h4 id="djmc27" class="markdown-heading">过滤特殊字符<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>可以发现在敏感词内容的中间添加一些空格、字符、表情都不能正确的在前缀树中匹配到。因此我们在进行匹配的时候应该过滤一些特殊的字符，只保留汉字、数字、字母，然后全部以小写来进行匹配。</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> FilterSpecialChar 过滤特殊字符</span>
+func (st *SensitiveTrie) FilterSpecialChar(text <span style="color: rgba(0, 0, 255, 1)">string</span>) <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)"> {
+   text </span>=<span style="color: rgba(0, 0, 0, 1)"> strings.ToLower(text)
+   text </span>= strings.Replace(text, <span style="color: rgba(128, 0, 0, 1)">"</span> <span style="color: rgba(128, 0, 0, 1)">"</span>, <span style="color: rgba(128, 0, 0, 1)">""</span>, -<span style="color: rgba(128, 0, 128, 1)">1</span>) <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 去除空格
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 过滤除中英文及数字以外的其他字符</span>
+   otherCharReg := regexp.MustCompile(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">[^\u4e00-\u9fa5a-zA-Z0-9]</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+   text </span>= otherCharReg.ReplaceAllString(text, <span style="color: rgba(128, 0, 0, 1)">""</span><span style="color: rgba(0, 0, 0, 1)">)
+   </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> text
+}</span></pre>
+</div>
+<p>感觉这里去除空格是多余的步骤，正则以已经帮你排除了。</p>
+<ul>
+<li><code>\u4e00-\u9fa5a</code>代表所有的中文</li>
+<li><code>a-zA-Z</code>&nbsp;代表大小写字母</li>
+<li><code>0-9</code>&nbsp;数字</li>
+<li>连起来在最前面加上一个&nbsp;<code>^ 就是进行一个取反</code></li>
+</ul>
+<h4 id="9384p6" class="markdown-heading">添加拼音检测<button class="cnblogs-toc-button" title="显示目录导航" aria-expanded="false"></button></h4>
+<p>最后就是添加中文的拼音检测，让输入的拼音也能正确的匹配到，拼音检测是把我们的敏感词转换成拼音然后添加到前缀树中。</p>
+<p>实现中文转拼音可以用别人造好的轮子</p>
+<div class="cnblogs_code">
+<pre>go <span style="color: rgba(0, 0, 255, 1)">get</span> github.com/chain-zhang/pinyin</pre>
+</div>
+<p>查看源码整体的思路就是用文件把文字的rune和拼音对应上，具体细节自行查看</p>
+<p>测试一下</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> HansCovertPinyin 中文汉字转拼音</span>
+func HansCovertPinyin(contents []<span style="color: rgba(0, 0, 255, 1)">string</span>) []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)"> {
+   pinyinContents :</span>= make([]<span style="color: rgba(0, 0, 255, 1)">string</span>, <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)">)
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> _, content :=<span style="color: rgba(0, 0, 0, 1)"> range contents {
+      chineseReg :</span>= regexp.MustCompile(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">[\u4e00-\u9fa5]</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span> !chineseReg.Match([]<span style="color: rgba(0, 0, 255, 1)">byte</span><span style="color: rgba(0, 0, 0, 1)">(content)) {
+         </span><span style="color: rgba(0, 0, 255, 1)">continue</span><span style="color: rgba(0, 0, 0, 1)">
+      }
+
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 只有中文才转</span>
+      pin :=<span style="color: rgba(0, 0, 0, 1)"> pinyin.New(content)
+      pinStr, err :</span>=<span style="color: rgba(0, 0, 0, 1)"> pin.Convert()
+      println(content, </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">-&gt;</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, pinStr)
+      </span><span style="color: rgba(0, 0, 255, 1)">if</span> err ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+         pinyinContents </span>=<span style="color: rgba(0, 0, 0, 1)"> append(pinyinContents, pinStr)
+      }
+   }
+   </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> pinyinContents
+}
+
+func main() {
+   sensitiveWords :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   }
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 汉字转拼音</span>
+   pinyinContents :=<span style="color: rgba(0, 0, 0, 1)"> HansCovertPinyin(sensitiveWords)
+   fmt.Println(pinyinContents)
+ }</span></pre>
+</div>
+<p>输出结果如下：</p>
+<div class="cnblogs_code">
+<pre>傻逼 -&gt;<span style="color: rgba(0, 0, 0, 1)"> sha bi                             
+傻叉 </span>-&gt;<span style="color: rgba(0, 0, 0, 1)"> sha cha                            
+垃圾 </span>-&gt;<span style="color: rgba(0, 0, 0, 1)"> la ji                              
+妈的 </span>-&gt;<span style="color: rgba(0, 0, 0, 1)"> ma de                              
+[sha bi sha cha la ji ma de] </span></pre>
+</div>
+<p>然后再测试敏感词匹配的效果</p>
+<div class="cnblogs_code">
+<pre><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> Match 查找替换发现的敏感词</span>
+func (st *SensitiveTrie) Match(text <span style="color: rgba(0, 0, 255, 1)">string</span>) (sensitiveWords []<span style="color: rgba(0, 0, 255, 1)">string</span>, replaceText <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> st.root ==<span style="color: rgba(0, 0, 0, 1)"> nil {
+      </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> nil, text
+   }
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 过滤特殊字符</span>
+   filteredText :=<span style="color: rgba(0, 0, 0, 1)"> st.FilterSpecialChar(text)
+   sensitiveMap :</span>= make(map[<span style="color: rgba(0, 0, 255, 1)">string</span>]*<span style="color: rgba(0, 0, 255, 1)">struct</span>{}) <span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 利用map把相同的敏感词去重</span>
+   textChars :=<span style="color: rgba(0, 0, 0, 1)"> []rune(filteredText)
+   textCharsCopy :</span>=<span style="color: rgba(0, 0, 0, 1)"> make([]rune, len(textChars))
+   copy(textCharsCopy, textChars)
+   </span><span style="color: rgba(0, 0, 255, 1)">for</span> i, textLen := <span style="color: rgba(128, 0, 128, 1)">0</span>, len(textChars); i &lt; textLen; i++<span style="color: rgba(0, 0, 0, 1)"> {
+     ...
+   }
+
+   </span><span style="color: rgba(0, 0, 255, 1)">if</span> len(sensitiveWords) &gt; <span style="color: rgba(128, 0, 128, 1)">0</span><span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 有敏感词</span>
+      replaceText = <span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">(textCharsCopy)
+   } </span><span style="color: rgba(0, 0, 255, 1)">else</span><span style="color: rgba(0, 0, 0, 1)"> {
+      </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 没有则返回原来的文本</span>
+      replaceText =<span style="color: rgba(0, 0, 0, 1)"> text
+   }
+
+   </span><span style="color: rgba(0, 0, 255, 1)">return</span><span style="color: rgba(0, 0, 0, 1)"> sensitiveWords, replaceText
+}
+
+</span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 前缀树匹配敏感词</span>
+func trieDemo(sensitiveWords []<span style="color: rgba(0, 0, 255, 1)">string</span>, matchContents []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">) {
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 汉字转拼音</span>
+   pinyinContents :=<span style="color: rgba(0, 0, 0, 1)"> HansCovertPinyin(sensitiveWords)
+   fmt.Println(pinyinContents)
+
+   trie :</span>=<span style="color: rgba(0, 0, 0, 1)"> NewSensitiveTrie()
+   trie.AddWords(sensitiveWords)
+   trie.AddWords(pinyinContents) </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 添加拼音敏感词</span>
+
+   <span style="color: rgba(0, 0, 255, 1)">for</span> _, srcText :=<span style="color: rgba(0, 0, 0, 1)"> range matchContents {
+      matchSensitiveWords, replaceText :</span>=<span style="color: rgba(0, 0, 0, 1)"> trie.Match(srcText)
+      fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">srcText        -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, srcText)
+      fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">replaceText    -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, replaceText)
+      fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sensitiveWords -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, matchSensitiveWords)
+      fmt.Println()
+   }
+
+   </span><span style="color: rgba(0, 128, 0, 1)">//</span><span style="color: rgba(0, 128, 0, 1)"> 动态添加</span>
+   trie.AddWord(<span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">牛大大</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+   content :</span>= <span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">今天，牛大大去挑战灰大大了</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">
+   matchSensitiveWords, replaceText :</span>=<span style="color: rgba(0, 0, 0, 1)"> trie.Match(content)
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">srcText        -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, content)
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">replaceText    -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, replaceText)
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sensitiveWords -&gt; </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">, matchSensitiveWords)
+}
+
+func main() {
+   sensitiveWords :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻逼</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">垃圾</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">妈的</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">sb</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   }
+
+   matchContents :</span>= []<span style="color: rgba(0, 0, 255, 1)">string</span><span style="color: rgba(0, 0, 0, 1)">{
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">你是一个大傻逼，大傻叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">你是傻☺叉</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">shabi东西</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">他made东西</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">什么垃 圾打野，傻逼一样，叫你来开龙不来，SB</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+      </span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">正常的内容☺</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">,
+   }
+
+   fmt.Println(</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(128, 0, 0, 1)">\n--------- 前缀树匹配敏感词 ---------</span><span style="color: rgba(128, 0, 0, 1)">"</span><span style="color: rgba(0, 0, 0, 1)">)
+   trieDemo(sensitiveWords, matchContents)
+
+}</span></pre>
+</div>
+<p>结果如下：</p>
+<div class="cnblogs_code">
+<pre>--------- 前缀树匹配敏感词 ---------<span style="color: rgba(0, 0, 0, 1)">
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  你是一个大傻逼，大傻叉                  
+replaceText    </span>-&gt;  你是一个大**大**<span style="color: rgba(0, 0, 0, 1)">                          
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  [傻逼 傻叉]                               
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  你是傻☺叉                                 
+replaceText    </span>-&gt;  你是**<span style="color: rgba(0, 0, 0, 1)">                                    
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  [傻叉]                                    
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  shabi东西                                 
+replaceText    </span>-&gt;  *****<span style="color: rgba(0, 0, 0, 1)">东西                                 
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  [shabi]                                   
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  他made东西                                
+replaceText    </span>-&gt;  他****<span style="color: rgba(0, 0, 0, 1)">东西                                
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  [made]                                    
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  什么垃圾打野，傻逼一样，叫你来开龙不来，SB
+replaceText    </span>-&gt;  什么**打野**一样叫你来开龙不来**<span style="color: rgba(0, 0, 0, 1)">          
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  [垃圾 傻逼 sb]                            
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  正常的内容☺                               
+replaceText    </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  正常的内容☺                               
+sensitiveWords </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  []                                        
+
+srcText        </span>-&gt;<span style="color: rgba(0, 0, 0, 1)">  今天，牛大大挑战灰大大
+replaceText    </span>-&gt;  今天***<span style="color: rgba(0, 0, 0, 1)">挑战灰大大
+sensitiveWords </span>-&gt;  [牛大大]</pre>
+</div>
+<p>整体效果还是挺不错的，但是一些谐音或者全部英文句子时有空格还是不能去除空格不然可能会存在误判还是不能检测出，要想充分的进行敏感词检测，首先要有完善的敏感词库，其次就是特殊情况特殊处理，最后就是先进行敏感词匹配然后再进行自然语言处理NLP完善，训练风控模型等检测效果才更只能。</p>
+<p>&nbsp;</p>
+</div>
+<div class="clear"></div>
+<div id="blog_post_info_block" role="contentinfo">
+
+
+
+<div id="EntryTag">
+    标签: 
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/Go/">Go</a>
+</div>
+    <div id="blog_post_info">
+<div id="green_channel">
+        <a href="javascript:void(0);" id="green_channel_digg" onclick="DiggIt(16688643,cb_blogId,1);green_channel_success(this,&#39;谢谢推荐！&#39;);">好文要顶</a>
+        <a id="green_channel_follow" onclick="follow(&#39;759626ba-32ab-44f1-83d0-08d5ae204bb4&#39;);" href="javascript:void(0);">关注我</a>
+    <a id="green_channel_favorite" onclick="AddToWz(cb_entryId);return false;" href="javascript:void(0);">收藏该文</a>
+    <a id="green_channel_wechat" href="javascript:void(0);" title="分享至微信" onclick="shareManager.wechatShare()"><img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/wechat.png" alt=""></a>
+</div>
+<div id="author_profile">
+    <div id="author_profile_info" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/taotaozhuanyong/" target="_blank"><img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/20190918160405.png" class="author_avatar" alt=""></a>
+        <div id="author_profile_detail" class="author_profile_info">
+            <a href="https://home.cnblogs.com/u/taotaozhuanyong/">冰乐</a>
+            <br>
+            <a href="https://home.cnblogs.com/u/taotaozhuanyong/followers/">粉丝 - <span class="follower-count">74</span></a>
+            <a href="https://home.cnblogs.com/u/taotaozhuanyong/followees/">关注 - <span class="following-count">49</span></a><br>
+        </div>
+    </div>
+    <div class="clear"></div>
+    <div id="author_profile_honor"></div>
+    <div id="author_profile_follow" class="follow-tip">
+                <a href="javascript:void(0);" onclick="follow(&#39;759626ba-32ab-44f1-83d0-08d5ae204bb4&#39;);return false;">+加关注</a>
+    </div>
+</div>
+<div id="div_digg">
+    <div class="diggit" onclick="votePost(16688643,&#39;Digg&#39;)">
+        <span class="diggnum" id="digg_count">0</span>
+    </div>
+    <div class="buryit" onclick="votePost(16688643,&#39;Bury&#39;)">
+        <span class="burynum" id="bury_count">0</span>
+    </div>
+    <div class="clear"></div>
+    <div class="diggword" id="digg_tips">
+    </div>
+        <div id="vip_tip"><a class="tip" href="https://cnblogs.vip/" target="_blank">升级成为会员</a></div>
+</div>
+
+<script type="text/javascript">
+    currentDiggType = 0;
+</script>
+</div>
+    <div class="clear"></div>
+    <div id="post_next_prev">
+
+    <a href="https://www.cnblogs.com/taotaozhuanyong/p/16657507.html" class="p_n_p_prefix">« </a> 上一篇：    <a href="https://www.cnblogs.com/taotaozhuanyong/p/16657507.html" data-featured-image="" title="发布于 2022-09-05 11:26">Golang开发过程中常遇到得一些小错误</a>
+    <br>
+    <a href="https://www.cnblogs.com/taotaozhuanyong/p/17439736.html" class="p_n_p_prefix">» </a> 下一篇：    <a href="https://www.cnblogs.com/taotaozhuanyong/p/17439736.html" data-featured-image="" title="发布于 2023-05-29 10:32">MQTT协议简介</a>
+
+</div>
+</div>
+            </div>
+            <div class="postDesc">posted @ 
+<span id="post-date" data-last-update-days="376.9863625166701" data-date-created="BlogServer.Application.Dto.BlogPost.BlogPostDto" data-date-updated="2022-09-13 12:07" aria-expanded="false">2022-09-13 12:07</span>&nbsp;
+<a href="https://www.cnblogs.com/taotaozhuanyong/">冰乐</a>&nbsp;
+阅读(<span id="post_view_count">925</span>)&nbsp;
+评论(<span id="post_comment_count">0</span>)&nbsp;
+<a href="https://i.cnblogs.com/EditPosts.aspx?postid=16688643" rel="nofollow">编辑</a>&nbsp;
+<a href="javascript:void(0)" onclick="AddToWz(16688643);return false;">收藏</a>&nbsp;
+<a href="javascript:void(0)" onclick="reportManager.report({ currentUserId: &#39;6dbbf76d-186b-45fb-9916-08d6822e67f8&#39;, targetType: &#39;blogPost&#39;, targetId: &#39;16688643&#39;, targetLink: &#39;https://www.cnblogs.com/taotaozhuanyong/p/16688643.html&#39;, title: &#39;Golang使用前缀树算法实现敏感词过滤&#39; })">举报</a>
+</div>
+        </div>
+	    
+	    
+    </div><!--end: topics 文章、评论容器-->
+</div>
+
+<script>
+    var cb_entryId = 16688643, cb_entryCreatedDate = '2022-09-13 12:07', cb_postType = 1, cb_postTitle = 'Golang使用前缀树算法实现敏感词过滤';
+    var allowComments = true, cb_blogId = 523143, cb_blogApp = 'taotaozhuanyong', cb_blogUserGuid = '759626ba-32ab-44f1-83d0-08d5ae204bb4';
+    mermaidRender.render()
+    markdown_highlight()
+    zoomManager.apply("#cnblogs_post_body img:not(.code_img_closed):not(.code_img_opened)");
+    updatePostStats(
+            [cb_entryId],
+            function(id, count) { $("#post_view_count").text(count) },
+            function(id, count) { $("#post_comment_count").text(count) });
+</script>
+<a id="!comments"></a>
+<div id="blog-comments-placeholder"></div>
+<div id="comment_form" class="commentform">
+    <a name="commentform"></a>
+    <div id="divCommentShow"></div>
+    <div id="comment_nav">
+        <div class="comment-nav-right">
+            <span id="span_refresh_tips"></span><a href="javascript:void(0);" onclick="return RefreshCommentList();" id="lnk_RefreshComments" runat="server" clientidmode="Static">刷新评论</a><a href="https://www.cnblogs.com/taotaozhuanyong/p/16688643.html#" onclick="return RefreshPage();">刷新页面</a><a href="https://www.cnblogs.com/taotaozhuanyong/p/16688643.html#top">返回顶部</a>
+        </div>
+    </div>
+    <div id="comment_form_container" style="visibility: visible;"><script type="text/javascript" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/mention.min.js"></script>
+<div id="commentform_title">
+    <label>发表评论</label>
+        <a href="https://cnblogs.vip/" target="_blank" style="margin-left:20px">升级成为园子VIP会员</a>
+</div>
+<span id="tip_comment" style="color:Red"></span>
+<div class="commentbox_main comment_textarea">
+    <div class="commentbox_title">
+        <div class="commentbox_title_left">
+            <span id="btn_edit_comment" class="commentbox_tab active" title="编辑评论">编辑</span>
+            <span id="btn_preview_comment" class="commentbox_tab" title="Markdown 预览">预览</span>
+        </div>
+        <div class="commentbox_title_right">
+            <span id="ubb_bold" class="comment_icon" alt="粗体" title="添加粗体(Ctrl + B)">
+                <svg class="comment_svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <path d="m13.221 19c1.4414 0 2.5793-0.27451 3.3759-0.82353 0.92931-0.66667 1.4034-1.7059 1.4034-3.1176 0-0.94118-0.22759-1.7059-0.66379-2.2549-0.45517-0.56863-1.119-0.94118-2.0103-1.1176 0.68276-0.27451 1.1948-0.64706 1.5552-1.1569 0.36034-0.54902 0.55-1.2157 0.55-2 0-1.0588-0.36034-1.902-1.0621-2.5294-0.75862-0.66667-1.8207-1-3.1672-1h-6.2017v14h6.2207zm-0.82196-8h-3.3987v-4h3.4367c0.91139 0 1.557 0.15686 1.9747 0.47059 0.37975 0.29412 0.58861 0.78431 0.58861 1.451 0 0.72549-0.20886 1.2549-0.58861 1.5882-0.39873 0.31373-1.0633 0.4902-2.0127 0.4902zm0.52612 6h-3.9249v-4h3.9855c1.052 0 1.8208 0.16216 2.3064 0.48649 0.46532 0.32432 0.70809 0.84685 0.70809 1.5856 0 0.72072-0.3237 1.2252-0.9711 1.5495-0.50578 0.25225-1.2139 0.37838-2.104 0.37838z" fill-rule="nonzero" stroke-width=".35"></path>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_url" class="comment_icon" title="添加链接(Ctrl + K)" alt="链接">
+                <svg class="comment_svg comment_svg_stroke" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(4 4)" fill-rule="nonzero" stroke-width=".4">
+                            <path d="m6.304 9.696c-0.288-0.288-0.512-0.608-0.704-0.992-0.16-0.32-0.032-0.704 0.288-0.864 0.32-0.16 0.704-0.032 0.864 0.288 0.128 0.224 0.256 0.448 0.448 0.64 0.928 0.928 2.432 0.928 3.36 0l3.36-3.328c0.928-0.928 0.928-2.432 0-3.36s-2.432-0.928-3.36 0l-2.272 2.272c-0.256 0.256-0.64 0.256-0.896 0-0.256-0.256-0.256-0.64 0-0.896l2.272-2.272c1.44-1.44 3.744-1.44 5.184 0 1.44 1.44 1.44 3.744 0 5.184l-3.36 3.296c-0.704 0.704-1.632 1.088-2.592 1.088-0.928 0-1.856-0.352-2.592-1.056z"></path>
+                            <path d="m3.776 15.808c-0.992 0-1.888-0.384-2.592-1.056-1.44-1.44-1.44-3.744 0-5.184l3.328-3.328c1.44-1.44 3.744-1.44 5.184 0 0.288 0.288 0.544 0.64 0.736 1.024 0.16 0.32 0 0.704-0.32 0.864-0.32 0.16-0.704 0-0.864-0.32-0.128-0.256-0.288-0.48-0.48-0.672-0.928-0.928-2.432-0.928-3.36 0l-3.296 3.328c-0.928 0.928-0.928 2.432 0 3.36 0.448 0.448 1.056 0.704 1.664 0.704 0.608 0 1.248-0.256 1.664-0.704l2.112-2.112c0.256-0.256 0.64-0.256 0.896 0s0.256 0.64 0 0.896l-2.112 2.112c-0.672 0.704-1.568 1.088-2.56 1.088z"></path>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_code" class="comment_icon" title="添加代码(Ctrl + `)" alt="代码">
+                <svg class="comment_svg comment_svg_stroke" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(16 6)" stroke-linecap="round" stroke-width="2">
+                            <line x1=".5" x2="4.5" y1=".7" y2="6.3"></line>
+                            <line transform="translate(2.5 9.1) scale(1 -1) translate(-2.5 -9.1)" x1=".5" x2="4.5" y1="6.3" y2="11.9"></line>
+                        </g>
+                        <g transform="translate(3 6.1)" stroke-linecap="round" stroke-width="2">
+                            <line transform="translate(2.5 3.5) scale(-1 1) translate(-2.5 -3.5)" x1=".5" x2="4.5" y1=".7" y2="6.3"></line>
+                            <line transform="translate(2.5 9.1) scale(-1) translate(-2.5 -9.1)" x1=".5" x2="4.5" y1="6.3" y2="11.9"></line>
+                        </g>
+                        <path transform="translate(12 12.5) scale(1 -1) translate(-12 -12.5)" d="m10.778 7.1249c0.50008-0.11366 0.9978 0.16911 1.1643 0.64128l0.032406 0.11223 2 8.8c0.1224 0.53855-0.21496 1.0744-0.75351 1.1968-0.50008 0.11366-0.9978-0.16911-1.1643-0.64128l-0.032406-0.11223-2-8.8c-0.1224-0.53855 0.21496-1.0744 0.75351-1.1968z" fill-rule="nonzero" stroke-width=".25"></path>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_quote" class="comment_icon" title="添加引用(Ctrl + Q)" alt="引用">
+                <svg class="comment_svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(5 4)" fill-rule="nonzero" stroke-width=".25">
+                            <path d="m5.0013 15v-5.2702h-2.8008c-0.13413-3.3762 1.2004-6.2143 4.0009-8.5135l-1.2-1.2163c-3.335 2.2996-5.0013 5.8119-5.0013 10.54v4.4595h5.0013-1.285e-5zm8.7987 0v-5.2702h-2.8008c-0.13453-3.3762 1.2-6.2143 4.0009-8.5135l-1.2-1.2163c-3.335 2.2996-5.0013 5.8119-5.0013 10.54v4.4595h5.0013-1.28e-5z"></path>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+            <span id="ubb_img" class="comment_icon" alt="图片" title="上传图片(Ctrl + I)">
+                <svg class="comment_svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <g fill-rule="evenodd">
+                        <g transform="translate(3 3.8)" fill-rule="nonzero">
+                            <path d="m14.1 0.58235h-11.2c-1.32 0-2.4 1.0482-2.4 2.3294v10.871c0 1.2812 1.08 2.3294 2.4 2.3294h11.2c1.32 0 2.4-1.0482 2.4-2.3294v-10.871c0-1.2812-1.08-2.3294-2.4-2.3294zm0.7 13.569-3.63-3.4165 1.33-1.2909c0.21-0.20382 0.59-0.20382 0.8 0l1.6 1.5529v2.7856c0 0.13588-0.04 0.26206-0.1 0.36882zm-11.9-12.016h11.2c0.44 0 0.8 0.34941 0.8 0.77647v5.8915l-0.47-0.45618c-0.84-0.825-2.22-0.825-3.07 0l-1.35 1.3103-2.39-2.2421c-0.85-0.825-2.22-0.825-3.05-0.019412l-2.48 2.2615v-6.7456c0.01-0.42706 0.37-0.77647 0.81-0.77647zm-0.8 11.647v-1.9897l3.6-3.2806c0.21-0.20382 0.58-0.21353 0.81 0.0097059l6.43 6.0371h-10.04c-0.44 0-0.8-0.33971-0.8-0.77647z"></path>
+                            <ellipse cx="10.5" cy="6.4059" rx="1" ry="1"></ellipse>
+                        </g>
+                    </g>
+                </svg>
+            </span>
+        </div>
+    </div>
+    <div style="display:none">
+        <span id="comment_edit_id"></span>
+        <span id="span_parentcomment_id"></span>
+        <span id="span_parent_id"></span>
+        <span id="span_comment_replyto"></span>
+        <span id="span_comment_posted"></span>
+        <span id="span_current_user_id">6dbbf76d-186b-45fb-9916-08d6822e67f8</span>
+    </div>
+    <textarea id="tbCommentBody" placeholder="支持 Markdown"></textarea>
+    <div id="tbCommentBodyPreview" class="feedbackCon" style="display: none">
+        <div id="tbCommentBodyPreviewBody" class="blog_comment_body comment_preview cnblogs-markdown"></div>
+    </div>
+    <div class="commentbox_footer">
+        <span>&nbsp;</span>
+        <span href="javascript:void(0)" id="ubb_auto_completion" class="comment_option">
+            <svg style="display: none" id="comment_auto_completion_on" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"><path d="M406.724 908.504c-89.02 0-157.885-32.319-206.594-96.957-49.549-64.639-73.903-155.795-73.903-274.299 0-116.017 24.354-206.345 73.903-270.155 48.71-63.81 117.574-95.3 206.594-95.3h19.316l-7.559 72.925h-3.359c-65.505 0-115.054 25.69-150.326 77.069-35.272 50.55-52.908 122.647-52.908 215.461 0 94.472 17.636 168.226 52.908 220.434 35.272 51.379 84.82 77.897 150.326 77.897h3.36l7.558 72.925h-19.316zm266.548 0c89.02 0 157.885-32.319 206.594-96.957 49.55-64.639 73.904-155.795 73.904-274.299 0-116.017-24.355-206.345-73.904-270.155-48.709-63.81-117.573-95.3-206.594-95.3h-19.315l7.558 72.925h3.36c65.505 0 115.054 25.69 150.326 77.069 35.272 50.55 52.908 122.647 52.908 215.461 0 94.472-17.636 168.226-52.908 220.434-35.272 51.379-84.821 77.897-150.327 77.897h-3.359l-7.558 72.925h19.315zm-94.068-65.897c0 31.514.854 54.433 1.708 68.758 1.709 14.325 3.417 25.784 6.835 34.38 2.563 8.594 6.834 14.324 12.814 20.054 5.126 5.73 14.523 11.46 27.337 17.189v34.38H451.914v-34.38c17.086-7.162 29.046-15.757 35.026-24.352 5.126-10.027 9.398-22.92 11.106-38.676 1.709-17.19 2.563-42.974 2.563-77.353V238.109c0-32.947-.854-55.866-1.709-71.623-1.708-14.325-4.271-25.784-6.834-32.947-3.417-8.595-7.689-15.757-12.814-20.054-5.126-5.73-14.523-10.027-27.338-17.19V61.916h175.984v34.38c-11.96 5.73-21.357 11.459-26.483 15.756-5.125 5.73-9.397 11.46-12.814 20.055-3.417 7.162-5.98 18.622-6.834 34.379-1.709 15.757-2.563 38.676-2.563 71.623v604.498z" fill-rule="nonzero"></path></svg>
+            <svg id="comment_auto_completion_off" viewBox="0 0 1080 1080" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2"><path d="M242.96 223.172l59.627 58.009c-14.277 10.773-26.874 24.032-37.791 40.606-35.272 50.55-52.908 122.647-52.908 215.461 0 94.472 17.636 168.226 52.908 220.434 35.272 51.379 84.82 77.897 150.326 77.897h3.36l7.558 72.925h-19.316c-89.02 0-157.885-32.319-206.594-96.957-49.549-64.639-73.903-155.795-73.903-274.299 0-116.017 24.354-206.345 73.903-270.155 12.597-16.574 26.874-31.49 42.83-43.921zm36.952-23.204c36.112-19.06 78.943-28.175 126.812-28.175h19.316l-7.559 72.925h-3.359c-27.714 0-52.908 4.144-74.743 14.088l-60.467-58.838zM805.123 770.94l60.466 58.01c-47.869 53.036-111.695 79.554-192.317 79.554h-19.315l7.558-72.925h3.36c59.626 0 105.816-21.546 140.248-64.638zm23.515-37.29c26.034-49.723 39.47-115.19 39.47-196.402 0-92.814-17.635-164.91-52.907-215.461-35.272-51.38-84.821-77.069-150.327-77.069h-3.359l-7.558-72.925h19.315c89.02 0 157.885 31.49 206.594 95.3 49.55 63.81 73.904 154.138 73.904 270.155 0 108.56-20.996 194.744-62.146 257.725l-62.986-61.324zM500.609 474.465l78.595 75.92v292.222c0 31.514.854 54.433 1.708 68.758 1.709 14.325 3.417 25.784 6.835 34.38 2.563 8.594 6.834 14.324 12.814 20.054 5.126 5.73 14.523 11.46 27.337 17.189v34.38H451.914v-34.38c17.086-7.162 29.046-15.757 35.026-24.352 5.126-10.027 9.398-22.92 11.106-38.676 1.709-17.19 2.563-42.974 2.563-77.353V474.465zm0-60.164V238.11c0-32.947-.854-55.866-1.709-71.623-1.708-14.325-4.271-25.784-6.834-32.947-3.417-8.595-7.689-15.757-12.814-20.054-5.126-5.73-14.523-10.027-27.338-17.19v-34.38h175.984v34.38c-11.96 5.73-21.357 11.459-26.483 15.756-5.125 5.73-9.397 11.46-12.814 20.055-3.417 7.162-5.98 18.622-6.834 34.379-1.709 15.757-2.563 38.676-2.563 71.623v253.545l-78.595-77.353z"></path><path d="M153.103 132.024l805.45 783.706-44.277 45.505-805.45-783.706z"></path></svg>
+            <span class="inline_middle">自动补全</span>
+        </span>
+    </div>
+</div>
+<p id="commentbox_opt">
+    <input id="btn_comment_submit" type="button" class="comment_btn" title="提交评论(Ctrl + Enter)" value="提交评论">
+    <span id="span_comment_canceledit" style="display:none"><a href="javascript:void(0);" onclick="return CancelCommentEdit()">不改了</a></span>
+    <a href="javascript:void(0);" onclick="return account.logout();">退出</a>
+            <a id="commentbox_opt_sub" href="javascript:void(0);" title="订阅后有新评论时会邮件通知您" onclick="commentManager.Subscribe()">订阅评论</a>
+</p>
+<div id="tip_comment2" style="color:Red"></div>
+<p>[Ctrl+Enter快捷键提交]</p>
+<script>var commentEditor = initCommentEditor("tbCommentBody");</script>
+
+</div>
+    <div class="ad_text_commentbox" id="ad_text_under_commentbox"></div>
+        <div id="cnblogs_ch"></div>
+    <div id="opt_under_post"></div>
+    <div id="cnblogs_c1" class="under-post-card">
+            <a href="https://developer.aliyun.com/topic/aiforgames?utm_content=g_1000380884" rel="nofollow" target="_blank" onclick="countCreativeClicks(&#39;C1-阿里云-亚运活动&#39;);countCreativeClicks(&#39;阿里云-亚运活动-term-&#39;)">
+                <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/35695-20230923232249692-1631888844.jpg" onload="countCreativeImpressions(&#39;C1-阿里云-亚运活动&#39;);countCreativeImpressions(&#39;阿里云-亚运活动-term-&#39;)" alt="">
+                <span id="c1_impression" style="display:none"></span>
+            </a>
+    </div>
+    <div id="under_post_card1"></div>
+    <div id="under_post_card2"></div>
+    <div id="HistoryToday" class="under-post-card" style="display: none;"></div>
+    <script type="text/javascript">
+        var commentManager = new blogCommentManager();
+        commentManager.renderComments(0);
+        fixPostBody();
+        window.footnoteTipManager.generateFootnoteTips();
+
+            window.tocManager.displayDisableTocTips = false;
+            window.tocManager.generateToc();
+            
+                setTimeout(function() { countViews(cb_blogId, cb_entryId); }, 50);
+            
+            deliverT2();
+            deliverC1C2();
+            loadNewsAndKb();
+            
+                LoadPostCategoriesTags(cb_blogId, cb_entryId);
+            
+            LoadPostInfoBlock(cb_blogId, cb_entryId, cb_blogApp, cb_blogUserGuid);
+            GetPrevNextPost(cb_entryId, cb_blogId, cb_entryCreatedDate, cb_postType);
+            loadOptUnderPost();
+            GetHistoryToday(cb_blogId, cb_blogApp, cb_entryCreatedDate);
+                </script>
+</div>
+
+	</div><!--end: forFlow -->
+	</div><!--end: mainContent 主体内容容器-->
+	<div id="sideBar">
+		<div id="sideBarMain">
+			<div id="sidebar_news" class="newsItem">
+    <h3 class="catListTitle">公告</h3>
+<div id="blog-news">    
+    <div id="sidebar_news_content">
+<div id="profile_block">
+    昵称：
+    <a href="https://home.cnblogs.com/u/taotaozhuanyong/">
+        冰乐
+    </a>
+    <br>
+    园龄：
+    <a href="https://home.cnblogs.com/u/taotaozhuanyong/" title="入园时间：2018-05-01">
+        5年4个月
+    </a>
+    <br>
+    粉丝：
+    <a class="follower-count" href="https://home.cnblogs.com/u/taotaozhuanyong/followers/">
+        74
+    </a>
+    <br>
+    关注：
+    <a class="folowing-count" href="https://home.cnblogs.com/u/taotaozhuanyong/followees/">
+        49
+    </a>
+    <div id="p_b_follow" class="follow-tip">
+<a href="javascript:void(0)" onclick="follow(&#39;759626ba-32ab-44f1-83d0-08d5ae204bb4&#39;)">+加关注</a></div>
+    <script>getFollowStatus('759626ba-32ab-44f1-83d0-08d5ae204bb4');</script>
+</div>
+</div>
+</div>
+<script>loadBlogNews();</script>
+
+ 
+</div>
+<div id="sidebar_c3"></div>
+			<div id="blog-calendar" style="">
+
+<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar" border="0">
+    <tbody>
+        <tr>
+            <td colspan="7">
+                <table class="CalTitle" cellspacing="0" border="0">
+                    <tbody>
+                        <tr>
+                            <td class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2023/08/25&#39;); return false;">&lt;</a>
+                            </td>
+                            <td align="center">2023年9月</td>
+                            <td align="right" class="CalNextPrev">
+                                <a href="javascript:void(0);" onclick="loadBlogCalendar(&#39;2023/10/25&#39;); return false;">&gt;</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <tr>
+        <th class="CalDayHeader" align="center" abbr="日" scope="col">日</th>
+        <th class="CalDayHeader" align="center" abbr="一" scope="col">一</th>
+        <th class="CalDayHeader" align="center" abbr="二" scope="col">二</th>
+        <th class="CalDayHeader" align="center" abbr="三" scope="col">三</th>
+        <th class="CalDayHeader" align="center" abbr="四" scope="col">四</th>
+        <th class="CalDayHeader" align="center" abbr="五" scope="col">五</th>
+        <th class="CalDayHeader" align="center" abbr="六" scope="col">六</th>
+    </tr>
+            <tr>
+                            <td class="CalOtherMonthDay" align="center">27</td>
+                            <td class="CalOtherMonthDay" align="center">28</td>
+                            <td class="CalOtherMonthDay" align="center">29</td>
+                            <td class="CalOtherMonthDay" align="center">30</td>
+                            <td class="CalOtherMonthDay" align="center">31</td>
+                        <td class="" align="center">
+                            1
+                        </td>
+                    <td class="CalWeekendDay" align="center">
+                        2
+                    </td>
+            </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            3
+                        </td>
+                            <td class="" align="center">
+                                4
+                            </td>
+                            <td class="" align="center">
+                                5
+                            </td>
+                            <td class="" align="center">
+                                6
+                            </td>
+                            <td class="" align="center">
+                                7
+                            </td>
+                            <td class="" align="center">
+                                8
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            9
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            10
+                        </td>
+                            <td class="" align="center">
+                                11
+                            </td>
+                            <td class="" align="center">
+                                12
+                            </td>
+                            <td class="" align="center">
+                                13
+                            </td>
+                            <td class="" align="center">
+                                14
+                            </td>
+                            <td class="" align="center">
+                                15
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            16
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            17
+                        </td>
+                            <td class="" align="center">
+                                18
+                            </td>
+                            <td class="" align="center">
+                                19
+                            </td>
+                            <td class="" align="center">
+                                20
+                            </td>
+                            <td class="" align="center">
+                                21
+                            </td>
+                            <td class="" align="center">
+                                22
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            23
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalWeekendDay" align="center">
+                            24
+                        </td>
+                            <td class="CalTodayDay" align="center">
+                                25
+                            </td>
+                            <td class="" align="center">
+                                26
+                            </td>
+                            <td class="" align="center">
+                                27
+                            </td>
+                            <td class="" align="center">
+                                28
+                            </td>
+                            <td class="" align="center">
+                                29
+                            </td>
+                        <td class="CalWeekendDay" align="center">
+                            30
+                        </td>
+                </tr>
+                <tr>
+                        <td class="CalOtherMonthDay" align="center">
+                            1
+                        </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                2
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                3
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                4
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                5
+                            </td>
+                            <td class="CalOtherMonthDay" align="center">
+                                6
+                            </td>
+                        <td class="CalOtherMonthDay" align="center">
+                            7
+                        </td>
+                </tr>
+    </tbody>
+</table></div><script>loadBlogDefaultCalendar();</script>			
+			<div id="leftcontentcontainer">
+				<div id="blog-sidecolumn"><!-- 搜索 -->
+<div id="sidebar_search" class="sidebar-block">
+    <div id="sidebar_search" class="mySearch">
+        <h3 class="catListTitle">搜索</h3>
+        <div id="sidebar_search_box">
+            <div id="widget_my_zzk" class="div_my_zzk">
+                <input type="text" id="q" onkeydown="return zzk_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="zzk_go()" type="button" value="找找看" id="btnZzk" class="btn_my_zzk">
+            </div>
+            <div id="widget_my_google" class="div_my_zzk">
+                <input type="text" name="google_q" id="google_q" onkeydown="return google_go_enter(event);" class="input_my_zzk">&nbsp;<input onclick="google_go()" type="button" value="谷歌搜索" class="btn_my_zzk">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 常用链接 -->
+<div id="sidebar_shortcut" class="sidebar-block"><div class="catListLink">
+<h3 class="catListTitle">
+常用链接
+</h3>
+<ul>
+    <li><a href="https://www.cnblogs.com/taotaozhuanyong/p/" title="我的博客的随笔列表">我的随笔</a></li>
+<li><a href="https://www.cnblogs.com/taotaozhuanyong/MyComments.html" title="我的发表过的评论列表">我的评论</a></li>
+<li><a href="https://www.cnblogs.com/taotaozhuanyong/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li>
+<li><a href="https://www.cnblogs.com/taotaozhuanyong/comments" title="我的博客的评论列表">最新评论</a></li>
+<li><a href="https://www.cnblogs.com/taotaozhuanyong/tag/" title="我的博客的标签列表">我的标签</a></li>
+
+</ul>
+</div>
+
+</div>
+
+<!-- 最新随笔 -->
+
+
+<!-- 我的标签 -->
+<div id="sidebar_toptags" class="sidebar-block"><div class="catListTag">
+    <h3 class="catListTitle"><a href="https://www.cnblogs.com/taotaozhuanyong/tag/" class="sidebar-card-title-a">我的标签</a></h3>
+<ul>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/dotnet%20core/">dotnet core<span class="tag-count">(27)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/SOA/">SOA<span class="tag-count">(18)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/Go/">Go<span class="tag-count">(18)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/C%23/">C#<span class="tag-count">(14)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式<span class="tag-count">(11)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/dotnet%20mvc/">dotnet mvc<span class="tag-count">(9)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E5%89%8D%E7%AB%AF/">前端<span class="tag-count">(6)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库<span class="tag-count">(5)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95/">数据结构与算法<span class="tag-count">(5)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E5%BE%AE%E6%9C%8D%E5%8A%A1/">微服务<span class="tag-count">(3)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/Redis/">Redis<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/RabbitMQ/">RabbitMQ<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/ORM/">ORM<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/MYSQL/">MYSQL<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/docker/">docker<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E4%BB%A3%E7%A0%81%E7%AE%A1%E7%90%86/">代码管理<span class="tag-count">(2)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/OOP/">OOP<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/k8s/">k8s<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/gRPC/">gRPC<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/GORM/">GORM<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/AOP/">AOP<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/">架构设计<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E5%B7%A5%E5%85%B7%E5%B0%8F%E6%8A%80%E5%B7%A7/">工具小技巧<span class="tag-count">(1)</span></a>
+        </li>
+        <li>
+            <a href="https://www.cnblogs.com/taotaozhuanyong/tag/%E5%B7%A5%E5%85%B7/">工具<span class="tag-count">(1)</span></a>
+        </li>
+    
+
+</ul>
+</div>
+
+</div>
+
+<!-- 积分与排名 -->
+<div id="sidebar_scorerank" class="sidebar-block"><div class="catListBlogRank">
+<h3 class="catListTitle">积分与排名</h3>
+<ul>
+	<li class="liScore">
+		积分 -	
+153630
+	</li>
+	<li class="liRank">
+		排名 -	
+8142
+	</li>
+</ul>
+</div>
+
+
+
+</div>
+
+<!-- 随笔分类、随笔档案、文章分类、新闻分类、相册、链接 -->
+<div id="sidebar_categories">
+
+    <div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+        <h3 class="catListTitle">
+            
+随笔档案<span class="sidebar-category-item-count">
+    (121)
+</span>
+
+
+        </h3>
+
+        <ul>
+
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2023/05.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2023年5月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2022/09.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2022年9月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2022/02.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2022年2月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/11.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年11月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/07.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年7月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/06.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年6月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/05.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年5月(6)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/04.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年4月(8)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/03.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年3月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/02.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年2月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2021/01.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2021年1月(4)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2020/12.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年12月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2020/11.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年11月(2)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2020/10.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年10月(17)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="true" style="display: block">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2020/08.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年8月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2020/06.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年6月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2020/04.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2020年4月(3)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2019/12.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2019年12月(1)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2019/11.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2019年11月(5)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2019/10.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2019年10月(8)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2019/09.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2019年9月(49)</a>
+ 
+                </li>                
+                <li data-category-list-item-visible="false" style="display: none">
+                    
+<a href="https://www.cnblogs.com/taotaozhuanyong/archive/2019/06.html" style="--cnb-category-item-link-indent-size: calc(0 * 1em)" class="category-item-link" rel="" target="">2019年6月(1)</a>
+ 
+                </li>                
+            <li>
+                <a href="javascript:void(0)" onclick="sideColumnManager.loadMore(this)">更多</a>
+            </li>
+        </ul>
+
+
+    </div>    
+</div>
+
+<!-- 最新评论 -->
+<!-- 阅读排行榜 -->
+<div id="sidebar_topviewedposts" class="sidebar-block"><div class="catListView">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/taotaozhuanyong/most-viewed" class="sidebar-card-title-a">
+    阅读排行榜
+</a>
+
+    </h3>
+    <div id="TopViewPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/11903750.html">
+                            1. Vue+ElementUI的后台管理框架(186566)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/11567017.html">
+                            2. WebApi简介(20044)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/12625911.html">
+                            3. vue中使用echarts遇到的Error in v-on handler: "TypeError: Cannot read property 'getAttribute' of null"(17299)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/14812561.html">
+                            4. MYSQL IN 一定走索引吗？(12725)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/11610063.html">
+                            5. OAuth2、OpenID Connect简介(11198)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div></div>
+
+<!-- 评论排行榜 -->
+<div id="sidebar_topcommentedposts" class="sidebar-block"><div class="catListFeedback">
+    <h3 class="catListTitle">
+        <a href="https://www.cnblogs.com/taotaozhuanyong/most-commented" class="sidebar-card-title-a">评论排行榜</a>
+
+    </h3>
+    <div id="TopFeedbackPostsBlock">
+        <ul style="word-break:break-all">
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/13793538.html">
+                            1. .Net Core3.0 WebApi  四:JWT权限验证(12)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/11602820.html">
+                            2. ASP.NET Core 3.0 WebApi中使用Swagger生成API文档简介(9)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/13993456.html">
+                            3. JavaScript中const,var,let区别与用法(6)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/13816181.html">
+                            4. .Net Core3.0 WebApi 十五：使用Serilog替换掉Log4j(4)
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://www.cnblogs.com/taotaozhuanyong/p/11610063.html">
+                            5. OAuth2、OpenID Connect简介(4)
+                        </a>
+                    </li>
+        </ul>
+    </div>
+</div></div>
+
+<!-- 推荐排行榜 -->
+<div id="sidebar_topdiggedposts" class="sidebar-block">
+<div id="topdigg_posts_wrap">
+    <div class="catListView">
+        <h3 class="catListTitle">
+            <a href="https://www.cnblogs.com/taotaozhuanyong/most-liked" class="sidebar-card-title-a">推荐排行榜</a>
+
+        </h3>
+        <div id="TopDiggPostsBlock">
+            <ul style="word-break: break-all">
+                        <li>
+                            <a href="https://www.cnblogs.com/taotaozhuanyong/p/11602820.html">
+                                1. ASP.NET Core 3.0 WebApi中使用Swagger生成API文档简介(10)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/taotaozhuanyong/p/11903750.html">
+                                2. Vue+ElementUI的后台管理框架(6)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/taotaozhuanyong/p/14812561.html">
+                                3. MYSQL IN 一定走索引吗？(4)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/taotaozhuanyong/p/11757738.html">
+                                4. DotNet Core中使用dapper(4)
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://www.cnblogs.com/taotaozhuanyong/p/13993456.html">
+                                5. JavaScript中const,var,let区别与用法(3)
+                            </a>
+                        </li>
+            </ul>
+        </div>
+    </div>
+</div></div><div id="sidebar_recentcomments" class="sidebar-block"><div class="catListComment">
+<h3 class="catListTitle"><a href="https://www.cnblogs.com/taotaozhuanyong/comments" class="sidebar-card-title-a">最新评论</a></h3>
+    <div class="RecentCommentBlock">
+        <ul>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/taotaozhuanyong/p/13814891.html">1. Re:.Net Core3.0 WebApi   十三：自定义返回Json大小写格式</a></li>
+                <li class="recent_comment_body"><p>部分接口返回</p>
+</li>
+                <li class="recent_comment_author">--_York</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/taotaozhuanyong/p/13793660.html">2. Re:.Net Core3.0 WebApi  五:项目分层</a></li>
+                <li class="recent_comment_body"><p>老哥，能把整个项目的目录结构截图分享一下吗？谢谢</p>
+</li>
+                <li class="recent_comment_author">--喜欢写代码的小陈</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/taotaozhuanyong/p/13794499.html">3. Re:.Net Core3.0 WebApi  八:使用Redis做数据缓存</a></li>
+                <li class="recent_comment_body"><p>写的很不错，学习了，有一点不足的地方是接口代码忘记贴了。</p>
+</li>
+                <li class="recent_comment_author">--農碼一生</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/taotaozhuanyong/p/13794499.html">4. Re:.Net Core3.0 WebApi  八:使用Redis做数据缓存</a></li>
+                <li class="recent_comment_body"><p>IredisCacheManager这个接口怎么编辑的</p>
+</li>
+                <li class="recent_comment_author">--缘—</li>
+                <li class="recent_comment_title"><a href="https://www.cnblogs.com/taotaozhuanyong/p/13793538.html">5. Re:.Net Core3.0 WebApi  四:JWT权限验证</a></li>
+                <li class="recent_comment_body"><p>老张的哲学</p>
+</li>
+                <li class="recent_comment_author">--AdmininAdmin</li>
+        </ul>
+    </div>
+</div>
+
+</div>
+
+
+</div>
+                    <script>loadBlogSideColumn();</script>
+			</div>			
+		</div><!--end: sideBarMain -->
+	</div><!--end: sideBar 侧边栏容器 -->
+	<div class="clear"></div>
+	</div><!--end: main -->
+	<div class="clear"></div>
+	<div id="footer">
+		<!--done-->
+Copyright © 2023 冰乐
+<br><span id="poweredby">Powered by .NET 7.0 on Kubernetes</span>
+
+
+
+	</div><!--end: footer -->
+</div><!--end: home 自定义的最大容器 -->
+
+
+
+    
+
+    <input type="hidden" id="antiforgery_token" value="CfDJ8Eg9kra6YURKsOjJwROiT4s6GPMI64zKm-ON28LMfYWXadNC4lrrlVWfpFUxa_ioKjOECOEDOowFg-nZ3klqN8smifhlHasKxcEDSRNjAPZElVFIn8f5vYfFXB9Ys2gnCencnldHl5zQM9N87zocGU6f9C0cTMcdn_zEwP-FNkGwcnlWZ9hjTOxNTKn3UF7G1Q">
+    <script async="" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/js"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-M95P3TTWJZ');
+</script>
+<script defer="" src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/hm.js"></script>
+
+
+<div style="z-index: 998; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.6); display: none; flex-direction: column; align-items: center; justify-content: center">
+<div style="background: #fff;padding: 30px; margin: 30px; border-radius: 16px;">
+  <div style="width: 200px; height: 200px; background: rgba(255, 255, 255, 0.8); position: absolute; top: -100px; right: -100px; border-radius: 100px"></div>
+  <div style="text-align: center; font-size: 18px; margin-bottom: 10px;">点击右上角即可分享</div>
+  <img src="./Golang使用前缀树算法实现敏感词过滤 - 冰乐 - 博客园_files/35695-20230906145857937-1471873834.gif" alt="微信分享提示">
+</div>   
+    </div><div id="syno-notification-is-installed"></div><deepl-input-controller><template shadowrootmode="open"><link rel="stylesheet" href="chrome-extension://cofdbpoegempjloogbagkncekinflcnj/build/content.css"><div><div class="dl-input-translation-container svelte-ju4595"><div></div></div></div></template></deepl-input-controller></body></html>
