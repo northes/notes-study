@@ -5,5 +5,8 @@
   "obsidian-linter",
   "obsidian-kanban",
   "obsidian-checklist-plugin",
-  "obsidian-collapse-all-plugin"
+  "obsidian-collapse-all-plugin",
+  "dataview",
+  "reveal-active-file-button",
+  "typing-assistant"
 ]
