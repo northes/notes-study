@@ -3,5 +3,7 @@
   "obsidian-auto-link-title",
   "table-editor-obsidian",
   "obsidian-linter",
-  "obsidian-kanban"
+  "obsidian-kanban",
+  "obsidian-checklist-plugin",
+  "obsidian-collapse-all-plugin"
 ]
