@@ -1,0 +1,2 @@
+- [GitHub - youngtrix/pierce\_through\_the\_laravel: A book explain a complete http request's life cycle in laravel framework.](https://github.com/youngtrix/pierce_through_the_laravel)
+- [Pierce through the Laravel | Laravel](http://www.idocloud.net/pttl/index.html)
