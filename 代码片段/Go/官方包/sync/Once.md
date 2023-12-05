@@ -69,7 +69,7 @@ func (o *Once) doSlow(f func()) {
 
 ## 热路径(hot path)
 
-[热路径(hot path)](../../学习/热路径(hot%20path).md)
+[热路径(hot path)](../../学习笔记/热路径(hot%20path).md)
 
 
 ## 使用
