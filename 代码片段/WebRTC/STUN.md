@@ -1,0 +1,7 @@
+- stun:stun.l.google.com:19302
+- stun:stun.nextcloud.com:443
+- stun:global.stun.twilio.com
+- stun:stun.cloudflare.com
+- stun:stun.miwifi.com
+- stun:stun.qq.com
+- stun:stunserver.stunprotocol.org
