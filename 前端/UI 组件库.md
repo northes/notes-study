@@ -7,6 +7,7 @@
 - [Geist - Vercel Design](https://vercel.com/design/introduction)
 - [TDesign](https://tdesign.tencent.com/) 腾讯
 - [Site Unreachable](https://www.mdui.org/) MD
+- [shadcn/ui](https://ui.shadcn.com/) vercel
 
 ## 基于TailwindCSS
 
