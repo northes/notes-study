@@ -6,18 +6,32 @@
 
 [SvelteKit • Web development, streamlined](https://kit.svelte.dev/)
 
+## 生态官网
+
+- [SvelteLab](https://www.sveltelab.dev/)
+- [Advent of Svelte](https://advent.sveltesociety.dev/)
+- [Discord](https://discord.com/channels/457912077277855764/1179937338751725659)
+
 ## JetBrains 集成
 
 安装 `Svelte` 插件
 
-## 创建项目方式 1
+## 创建项目
+
+### 方式 0
+
+使用 `sveltekit` 框架创建
+
+[SvelteKit](../SvelteKit/SvelteKit.md#创建)
+
+### 方式 1
 
 ```bash
 npm init vite
 # 选择 svelte 选项
 ```
 
-## 创建项目方式 2
+### 方式 2
 
 > 从 Github 中拉取模板，模板已不再维护，推荐使用创建项目 1
 

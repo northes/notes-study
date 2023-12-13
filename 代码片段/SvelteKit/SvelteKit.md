@@ -2,6 +2,9 @@
 
 ```bash
 npm create svelte@latest my-app
+cd myapp
+npm install
+npm run dev
 ```
 
 ## 学习
