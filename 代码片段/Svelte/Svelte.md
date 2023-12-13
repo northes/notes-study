@@ -11,6 +11,7 @@
 - [SvelteLab](https://www.sveltelab.dev/)
 - [Advent of Svelte](https://advent.sveltesociety.dev/)
 - [Discord](https://discord.com/channels/457912077277855764/1179937338751725659)
+- [Fetching Title#76wx](https://sveltesociety.dev/)
 
 ## JetBrains 集成
 
