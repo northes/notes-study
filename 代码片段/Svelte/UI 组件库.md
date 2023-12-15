@@ -16,10 +16,11 @@
 - [This is SvelteKit embed](https://sveltekit-embed.vercel.app/) 嵌入组件 Youtube、Sotify，Tweet 等
 - [SvelteUI - A variety of components, actions, transition and utility functions — SvelteUI](https://www.svelteui.org/) 中规中矩的风格
 - [Svelteit - Svelteit Docs](https://docs.svelteit.dev/) 线框风
-- [shadcn-svelte](https://www.shadcn-svelte.com/) 黑白，类 vercel
 - [drab](https://drab.robino.dev/) 无边框极简
-- [Introduction - Bits UI](https://www.bits-ui.com/docs/introduction) 无头UI
 
+
+- [Introduction - Bits UI](https://www.bits-ui.com/docs/introduction) 无头UI
+- [shadcn-svelte](https://www.shadcn-svelte.com/) 类 `vercel`，`bits-ui` + `tailwindcss`
 
 
 ### 基于 Tailwind CSS
