@@ -23,6 +23,7 @@
 ## 个人首页
 
 - [GitHub - anuraghazra/github-readme-stats: :zap: Dynamically generated stats for your github readmes](https://github.com/anuraghazra/github-readme-stats)
+- [GitHub Wrapped](https://www.githubwrapped.io/)
 
 ## 项目动态
 
