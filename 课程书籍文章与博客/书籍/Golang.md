@@ -17,3 +17,5 @@
 - [Learn Go with Tests - Learn Go with tests](https://quii.gitbook.io/learn-go-with-tests/)
 
 - [Go 程序设计](https://www.yuque.com/qyuhen/go)
+
+- [100 Go Mistakes](https://100go.co/) 100个go常见错误
