@@ -1,1 +1,3 @@
 - [shadcn/ui](https://ui.shadcn.com/)
+- [NextUI - Beautiful, fast and modern React UI Library](https://nextui.org/)
+- 
