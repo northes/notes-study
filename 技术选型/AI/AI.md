@@ -1,6 +1,8 @@
 ## 对话式AI
 
 [Sign Up - Open Assistant](https://open-assistant.io)
+[Gemini - Google DeepMind](https://deepmind.google/technologies/gemini/#introduction)
+
 
 
 ## 图片
