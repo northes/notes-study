@@ -18,3 +18,4 @@ vscode
 命令面板：Commond + Shift + P
 批量重命名：Shift + F6
 打开\\关闭终端：Shift + Esc
+批量缩进：向左 Shirft + Tab 向右 Tab
