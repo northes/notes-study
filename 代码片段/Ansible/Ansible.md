@@ -14,3 +14,7 @@
 ### 使用变量
 
 - [Using Variables — Ansible Documentation](https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#using-variables)
+
+### 模块
+
+- [Fetching Title#c3pi](https://github.com/ansible/ansible/tree/devel/lib/ansible/modules)
