@@ -7,11 +7,19 @@ sudo k0s status
 watch 'k0s kubectl get pods --all-namespaces'
 ```
 
+## 架构
+
+- [Architecture - Documentation](https://docs.k0sproject.io/v1.28.6+k0s.0/architecture/)
+
 
 ## 配置文件
 
 详解：[Configuration Options - Documentation](https://docs.k0sproject.io/head/configuration/)
 
+```bash
+# 验证配置
+k0s validate config --config path/to/config/file
+```
 
 ## 本地负载均衡器
 

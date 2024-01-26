@@ -1,3 +1,12 @@
+## 自动补全
+
+```bash
+# bash
+echo "source <(kubectl completion bash)" >> ~/.bashrc
+# 别名
+echo "alias 'k'='kubectl'" >> ~/.bashrc
+```
+
 ## 切换默认 namespace
 
 ```bash
