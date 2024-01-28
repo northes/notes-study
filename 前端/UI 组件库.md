@@ -30,6 +30,7 @@
 - [GitHub - tabler/tabler-icons: A set of over 4200 free MIT-licensed high-quality SVG icons for you to use in your web projects.](https://github.com/tabler/tabler-icons)
 - [Simple Icons](https://simpleicons.org/)
 - [Heroicons](https://heroicons.com/)
+- [Remix Icon - Open source icon library](https://remixicon.com/)
 
 
 ## 收费

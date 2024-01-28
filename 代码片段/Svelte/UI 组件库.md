@@ -37,3 +37,7 @@
 ## 待定
 
 - [Component Party](https://component-party.dev/)
+
+## 图标
+
+- [GitHub - aantusahaa/svelte-remixicon: An icon library for Svelte/SvelteKit based on Remix Icon. Consists of more than 2700 icons.](https://github.com/aantusahaa/svelte-remixicon)
