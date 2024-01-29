@@ -67,7 +67,7 @@ openebs-hostpath (default)   openebs.io/local   Delete          WaitForFirstCons
 
 `openebs-device` 未配置，可以由清单部署程序根据 [OpenEBS 文档](https://openebs.io/docs/) 进行配置
 
-### 无法找到 ClusterConfig CRD 类型
+### 无法找到 ClusterConfig CRD 类型 (No resources found)
 
 使用了动态配置才会有
 
