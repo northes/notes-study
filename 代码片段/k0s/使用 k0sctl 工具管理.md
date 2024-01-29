@@ -108,4 +108,9 @@ kubectl get po --kubeconfig kubeconfig -A
 ```bash
 # 可省略，同上
 k0sctl reset --config k0sctl.yaml
+# 清理以下目录
+/usr/lobcl/bin/k0s
+/usr/lobcl/bin/k0sctl
+/etc/k0s
+/var/lib/k0s
 ```
