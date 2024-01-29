@@ -23,9 +23,19 @@ watch 'k0s kubectl get pods --all-namespaces'
 k0s validate config --config path/to/config/file
 ```
 
-## 本地负载均衡器
 
-- [Node-local load balancing - Documentation](https://docs.k0sproject.io/v1.28.6+k0s.0/nllb/)
+## 部署清单(manifests)
+
+k0s 会持续监控此目录下的文件清单变动并自动应用，清单移除、修改，已部署的应用也会移除、修改
+
+`/var/lib/k0s/manifests`
+
+！需要显式指定 namespace，不会自动加到 default
+
+类似于 `kubectl apply -f /var/lib/k0s/manifests`
+
+- [Manifest Deployer - Documentation](https://docs.k0sproject.io/stable/manifests/)
+
 
 ## Q&A
 
@@ -75,8 +85,23 @@ openebs-hostpath (default)   openebs.io/local   Delete          WaitForFirstCons
 
 所有 controller 启用 `--enable-dynamic-config` 标志以使用动态配置，同时存在动态配置和静态配置(使用 `k0s.yaml` 文件)的方式会导致冲突
 
+除了 `spec.api` 和 `spec.storage` 下的配置，其他配置都可以动态更新。
+下面这些选项同样不可修改
+
+- `network.podCIDR`
+- `network.serviceCIDR`
+- `network.provider`
+
+```bash
+# 修改配置
+k0s config edit
+# /var/lib/k0s/pki/admin.conf 等同于 kubeconfig
+# 查看配置应用成功与否
+k0s config status
+```
+
 ### Node-local load balancing 节点本地负载均衡
 
 简而言之：主要是用于多 controller ，且 controller 无外部负载均衡器的集群中，用于 worker 与 controller 的通信。避免只有一个入口导致这个入口宕掉了导致所有 worker 无法连上 controller
 
-注意与软负载均衡器区别
+注意与 `LoadBalancer Service` 负载均衡器区别

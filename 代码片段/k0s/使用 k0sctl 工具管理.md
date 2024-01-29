@@ -44,6 +44,11 @@ spec:
     role: controller # 可配 controller、worker、controller+worker、single
     uploadBinary: true # 上传k0s二进制文件，而不是下载
     k0sBinaryPath: ./k0s # 指定上传的二进制文件路径
+    installFlags:
+	  - --enable-dynamic-config # 开启动态配置
+    files:
+	  - src: ./openebs-3.10.0.tgz
+        dstDir: /tmp/
   - ssh:
       address: 192.168.31.42
       user: root
@@ -56,8 +61,6 @@ spec:
       - src: ./k0s-airgap-bundle-v1.28.6+k0s.0-amd64 # 下载的对应版本的 bundle 包
         dstDir: /var/lib/k0s/images/ # 注意这个是目录，不是具体的文件名！！！上传到目标机器的位置，k0s启动时将会从这个固定路径读取所有的镜像并载入 containerd，方便离线部署
         perm: 0755
-	  - src: ./openebs-3.10.0.tgz
-        dstDir: /tmp/
   - ssh:
       address: 192.168.31.43
       user: root
@@ -70,12 +73,10 @@ spec:
       - src: ./k0s-airgap-bundle-v1.28.6+k0s.0-amd64
         dstDir: /var/lib/k0s/images/
         perm: 0755
-	  - src: ./openebs-3.10.0.tgz
-        dstDir: /tmp/
   k0s:
     version: 1.28.6+k0s.0 # 指定版本，需要与上传的二进制文件相同
     versionChannel: stable
-    dynamicConfig: false
+    dynamicConfig: false # 启用动态配置，创建 ClusterConfig CRD，并可以使用 k0s config edit 命令修改配置文件，每个 controller 都需要使用 `--enable-dynamic-config` 标志启动
     config: # 未提供的配置将使用默认值，这里的配置指的是 k0s.yaml
       apiVersion: k0s.k0sproject.io/v1beta1
       kind: ClusterConfig
@@ -89,7 +90,7 @@ spec:
             # repositories:
             charts:
               - name: openebs
-                # 使用本地chart文件的方式需要在每台目标机器上都有这个文件
+                # 使用本地chart文件的方式需要在每台 controller 机器上都有这个文件
                 chartname: /tmp/openebs-3.10.0.tgz
                 version: "3.10.0"
                 namespace: openebs
