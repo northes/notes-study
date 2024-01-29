@@ -39,13 +39,18 @@ kubectl get no
 默认情况下，控制平面根本不运行 kubelet，并且不接受任何工作负载，因此控制器不会显示在 kubectl 的节点列表中。如果希望控制器接受工作负载并运行 Pod，请使用： `k0s controller --enable-worker` （建议仅作为 test/dev/POC 环境）。
 
 
-### 无法通过配置开启 extensions
+### 无法通过 extensions 配置开启 openebs
 
 拓展需要联网安装，网络不通会导致失败
 
 检查：
+
 ```bash
 kubectl get chart -A
 # 例如：openebs 一直安装不成功
 k describe chart k0s-addon-chart-openebs -n kube-system
 ```
+
+下载对应的 chart，使用本地安装的方式安装
+
+[OpenEBS Helm Repository | OpenEBS Helm Charts](https://openebs.github.io/charts/)
