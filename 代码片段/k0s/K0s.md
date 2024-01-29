@@ -1,5 +1,7 @@
 ```bash
-curl -sSLf https://get.k0s.sh | sudo sh
+# 指定版本 K0S_VERSION=v1.28.6+k0s.0 
+# Debug等级日志 DEBUG=true	
+curl -sSLf https://get.k0s.sh | sudo DEBUG=true sh
 sudo k0s sysinfo
 sudo k0s install controller --single
 sudo k0s start

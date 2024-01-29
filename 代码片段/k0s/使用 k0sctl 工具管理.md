@@ -13,7 +13,7 @@
 
 ### 端口
 
-查看所有需要的端口：[Networking (CNI) - Documentation](https://docs.k0sproject.io/v1.28.6+k0s.0/networking/) （注意替换URL中的版本）
+查看所有需要的端口：[Networking (CNI) - Documentation](https://docs.k0sproject.io/stable/networking/)
 
 
 ## SSH
