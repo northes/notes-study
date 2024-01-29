@@ -53,4 +53,22 @@ k describe chart k0s-addon-chart-openebs -n kube-system
 
 下载对应的 chart，使用本地安装的方式安装
 
-[OpenEBS Helm Repository | OpenEBS Helm Charts](https://openebs.github.io/charts/)
+- [OpenEBS Helm Repository | OpenEBS Helm Charts](https://openebs.github.io/charts/)
+
+```bash
+# 安装好会有两个 storeClass 可供使用
+root@k0s-deploy:~/k0s# k get sc
+NAME                         PROVISIONER        RECLAIMPOLICY   VOLUMEBINDINGMODE      ALLOWVOLUMEEXPANSION   AGE
+openebs-device               openebs.io/local   Delete          WaitForFirstConsumer   false                  11m
+openebs-hostpath (default)   openebs.io/local   Delete          WaitForFirstConsumer   false                  11m
+```
+
+`openebs-hostpath` 是映射到 `/var/openebs/local` 的存储类
+
+`openebs-device` 未配置，可以由清单部署程序根据 [OpenEBS 文档](https://openebs.io/docs/) 进行配置
+
+### 无法找到 ClusterConfig CRD 类型
+
+使用了动态配置才会有
+
+- [Dynamic Configuration - Documentation](https://docs.k0sproject.io/stable/dynamic-configuration/)
