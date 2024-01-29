@@ -54,8 +54,10 @@ spec:
     k0sBinaryPath: ./k0s
     files: # 在开启部署前需上传的文件
       - src: ./k0s-airgap-bundle-v1.28.6+k0s.0-amd64 # 下载的对应版本的 bundle 包
-        dstDir: /var/lib/k0s/images/ # 上传到目标机器的位置，k0s启动时将会从这个固定路径读取所有的镜像并载入 containerd，方便离线部署
+        dstDir: /var/lib/k0s/images/ # 注意这个是目录，不是具体的文件名！！！上传到目标机器的位置，k0s启动时将会从这个固定路径读取所有的镜像并载入 containerd，方便离线部署
         perm: 0755
+	  - src: ./openebs-3.10.0.tgz
+        dstDir: /tmp/
   - ssh:
       address: 192.168.31.43
       user: root
@@ -68,6 +70,8 @@ spec:
       - src: ./k0s-airgap-bundle-v1.28.6+k0s.0-amd64
         dstDir: /var/lib/k0s/images/
         perm: 0755
+	  - src: ./openebs-3.10.0.tgz
+        dstDir: /tmp/
   k0s:
     version: 1.28.6+k0s.0 # 指定版本，需要与上传的二进制文件相同
     versionChannel: stable
@@ -80,6 +84,24 @@ spec:
       spec:
         images:
           default_pull_policy: Never # 指定镜像从不拉取，适用于离线部署
+	    extensions:
+          helm:
+            # repositories:
+            charts:
+              - name: openebs
+                # 使用本地chart文件的方式需要在每台目标机器上都有这个文件
+                chartname: /tmp/openebs-3.10.0.tgz
+                version: "3.10.0"
+                namespace: openebs
+                order: 1
+                values: |
+                  localprovisioner:
+                     hostpathClass:
+                       enabled: true
+                       isDefaultClass: true
+          storage:
+          #  type: openebs_local_storage # 需要联网拉取charts！网络不通会失败！因此采用本地charts包的方式安装
+            type: external_storage
 ```
 
 ## 部署

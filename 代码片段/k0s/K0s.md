@@ -72,3 +72,11 @@ openebs-hostpath (default)   openebs.io/local   Delete          WaitForFirstCons
 使用了动态配置才会有
 
 - [Dynamic Configuration - Documentation](https://docs.k0sproject.io/stable/dynamic-configuration/)
+
+所有 controller 启用 `--enable-dynamic-config` 标志以使用动态配置，同时存在动态配置和静态配置(使用 `k0s.yaml` 文件)的方式会导致冲突
+
+### Node-local load balancing 节点本地负载均衡
+
+简而言之：主要是用于多 controller ，且 controller 无外部负载均衡器的集群中，用于 worker 与 controller 的通信。避免只有一个入口导致这个入口宕掉了导致所有 worker 无法连上 controller
+
+注意与软负载均衡器区别
