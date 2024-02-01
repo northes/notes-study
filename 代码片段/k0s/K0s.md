@@ -37,6 +37,13 @@ k0s 会持续监控此目录下的文件清单变动并自动应用，清单移�
 - [Manifest Deployer - Documentation](https://docs.k0sproject.io/stable/manifests/)
 
 
+## IngressController
+
+支持使用官方的 `nginx-controller`
+
+[nginx-ingress-controller](../K8s/组件/Ingress%20Controller/nginx-ingress-controller.md)
+
+
 ## Q&A
 
 ### 获取不到 controller 节点
