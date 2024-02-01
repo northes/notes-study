@@ -4,9 +4,30 @@
 
 ## 使用 Yaml 清单安装
 
+### 清单
+
 `kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/cloud/deploy.yaml`
 
 注意修改对应的版本号
+
+### 使用主机网络模式安装
+
+当没有 `LoadBalance` 时，可以使用主机网络模式安装，即使用节点本地的 `80`,`443` 端口
+
+注意修改
+
+```yaml
+spec:
+  template:
+    spec:
+      hostNetwork: true
+```
+
+也可以完全删除名为 `ingress-nginx-controller`  的 `Service`
+
+使用离线安装的方式需注意 [离线安装](../../离线安装.md)
+
+
 
 
 ## 获取客户端IP

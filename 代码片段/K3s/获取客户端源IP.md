@@ -1,3 +1,3 @@
 使用 `nginx-ingress-controller` 获取
 
-[nginx-ingress-controller](../K8s/组件/Ingress%20Controller/nginx-ingress-controller.md)
+[Nginx-ingress-controller](../K8s/组件/Ingress%20Controller/Nginx-ingress-controller.md)
