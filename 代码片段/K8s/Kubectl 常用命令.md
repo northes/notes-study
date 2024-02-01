@@ -1,5 +1,57 @@
+## Pod 拷贝文件
+
+宿主机->Pod
+
+```
+kubectl cp /tmp/test_pod.txt default/mycentos-7b59b5b755-8rbgc:/root
+```
+
+Pod -> 宿主机
+
+```bash
+kubectl cp default/mycentos-7b59b5b755-8rbgc:/root/from_pod.txt  /tmp/from_pod.new
+```
+
+## 暴露服务
+
+```bash
+ k port-forward svc/argocd-server -n argocd 8080:443 --address 0.0.0.0
+```
+
+
+## 切换默认 namespace
+
+```bash
+kubectl config set-context --current --namespace=argocd
+```
+
+## 批量删除 pods
+
+```bash
+k get po -n apihut| grep apihut |awk '{print $1}' | xargs kubectl delete po -n apihut
+```
+
+## 删除 namespace 下所有资源(namespace 保留) 
+
+```bash
+kubectl delete all --all -n <namespace>
+```
+
+## node 详情
+
+```bash
+kubectl get no -o wide
+```
+
+## 封锁并清空节点
+
+```bash
+kubectl cordon <node-name>
+kubectl drain <node-name> --ignore-daemonset
+```
 
 ## Deployment
+
 ```bash
 # 部署应用
 kubectl apply -f xxx.yaml
