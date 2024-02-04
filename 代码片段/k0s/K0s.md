@@ -55,6 +55,8 @@ k0s 会持续监控此目录下的文件清单变动并自动应用，清单移�
 /var/lib/k0s
 # 二进制文件
 /usr/local/bin
+# 容器日志
+/var/log/pods
 ```
 
 

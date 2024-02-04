@@ -206,3 +206,16 @@ kubectl api-resources
 | replicasets  | rs     |
 
 > 其他未出现的如 jobs，secret 等没有缩写
+
+## 查看当前用户
+
+```bash
+kubectl auth whoami
+```
+
+## 检查当前用户时候有某个权限
+
+```bash
+# 检查当前用户是否有 get pods 的权限
+ k auth can-i get po
+```
