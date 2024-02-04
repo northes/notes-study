@@ -44,6 +44,18 @@ k0s 会持续监控此目录下的文件清单变动并自动应用，清单移�
 [Nginx-ingress-controller](../K8s/组件/Ingress%20Controller/Nginx-ingress-controller.md)
 
 
+## 常用路径
+
+```bash
+# 配置文件
+/etc/k0s
+# sock, cri，默认配置文件
+/run/k0s
+# 数据库，kubelet，pki，镜像
+/var/lib/k0s
+```
+
+
 ## Q&A
 
 ### 获取不到 controller 节点
