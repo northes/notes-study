@@ -27,3 +27,7 @@ sudo systemctl restart k3s
 # Agent 
 sudo systemctl restart k3s-agent
 ```
+
+## 负载均衡
+
+- [Site Unreachable](https://github.com/k3s-io/klipper-lb)
