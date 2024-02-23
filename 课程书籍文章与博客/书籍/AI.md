@@ -1,0 +1,1 @@
+- [《动手学深度学习》 — 动手学深度学习 2.0.0 documentation](https://zh.d2l.ai/index.html)
