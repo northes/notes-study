@@ -28,7 +28,7 @@
 ### 方式 1
 
 ```bash
-npm init vite
+npm init vite@latest
 # 选择 svelte 选项
 ```
 
