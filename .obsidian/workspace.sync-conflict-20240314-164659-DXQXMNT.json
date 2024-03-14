@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "课程书籍文章与博客/书籍/Golang.md",
+                "file": "代码片段/Wails/Wails.md",
                 "mode": "source",
                 "backlinks": false,
                 "source": true
@@ -49,7 +49,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "wails",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": true,
@@ -74,8 +74,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "horizontal",
@@ -95,7 +94,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "课程书籍文章与博客/书籍/Golang.md",
+                "file": "代码片段/Wails/Wails.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,7 +111,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "课程书籍文章与博客/书籍/Golang.md",
+                "file": "代码片段/Wails/Wails.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -135,7 +134,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "课程书籍文章与博客/书籍/Golang.md"
+                "file": "代码片段/Wails/Wails.md"
               }
             }
           },
@@ -184,8 +183,11 @@
       "switcher:打开快速切换": false
     }
   },
-  "active": "ee5b5f98118903b7",
+  "active": "78caa0bb190c54d3",
   "lastOpenFiles": [
+    "代码片段/Wails_ADMIN_Mar-14-163920-2024_Conflict/Wails.md",
+    "代码片段/Wails_ADMIN_Mar-14-163920-2024_Conflict",
+    "课程书籍文章与博客/书籍/Golang.md",
     "代码片段/Git/GUI 工具.md",
     "代码片段/Git/GUI 工具.sync-conflict-20240314-134217-DXQXMNT.md",
     "代码片段/Git/GUI 工具.sync-conflict-20240314-134240-DXQXMNT.md",
@@ -211,8 +213,6 @@
     "课程书籍文章与博客/实战/实战.md",
     "技术选型/帮助弹窗.md",
     "课程书籍文章与博客/实战",
-    "课程书籍文章与博客/快速入门.md",
-    "代码片段/Ansible/Ansible.md",
     "代码片段/未命名 2",
     "技术选型/云服务",
     "代码片段/OAuth2.0",
@@ -221,7 +221,6 @@
     "代码片段/算法/学习",
     "技术选型/非原生开发",
     "代码片段/未命名",
-    "代码片段/OAuth2.0/OpenID",
     "代码片段/Argo/ArgoWorkflow/assets/Pasted image 20230407172302.png",
     "个人项目/PVE APP/assets/Pasted image 20230119221741.png",
     "代码片段/CSS/assets/Pasted image 20230507152129.png",
