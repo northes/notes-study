@@ -1,3 +1,5 @@
 - [Fork - a fast and friendly git client for Mac and Windows](https://git-fork.com/)
 - [GitUp](https://gitup.co)
 - [GitButler | Git Branching, Refined](https://gitbutler.com)
+- [UGit - 让每个人都可以轻松使用Git](https://ugit.qq.com/zh/)
+- [The most powerful Git client for Mac and Windows | Tower Git Client](https://www.git-tower.com/mac)
