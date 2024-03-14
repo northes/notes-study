@@ -7,6 +7,13 @@ npm install
 npm run dev
 ```
 
+## 使用 TailwindCSS
+
+```bash
+npm install -D tailwindcss postcss autoprefixer
+npx tailwindcss init -p
+```
+
 ## 学习
 
 - [Introduction / Welcome to Svelte • Svelte Tutorial](https://learn.svelte.dev/tutorial/welcome-to-svelte)
