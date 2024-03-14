@@ -66,3 +66,69 @@ npm run build
 
 类Svelte编译器实现
 - [GitHub - malinajs/malinajs: Frontend compiler, inspired by Svelte](https://github.com/malinajs/malinajs)
+
+## 格式化
+
+[GitHub - sveltejs/prettier-plugin-svelte: Format your svelte components using prettier.](https://github.com/sveltejs/prettier-plugin-svelte)
+
+```bash
+npm i --save-dev prettier-plugin-svelte prettier
+```
+
+```
+// .prettierrc
+{
+    // ..
+    "plugins": ["prettier-plugin-svelte"],
+    "pluginSearchDirs": ["."], // should be removed in v3
+    "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+}
+```
+
+使用命令行格式化
+
+```bash
+npx prettier --write .
+```
+
+作为 `package.json` 中脚本的一部分
+
+```json
+// package.json
+{
+    // ..
+    "scripts": {
+        "format": "prettier --write .", // v3
+        "format": "prettier --write  --plugin prettier-plugin-svelte ." // v2
+    }
+}
+```
+
+### 与 Tailwindcss 结合使用
+
+安装 `prettier-plugin-tailwindcss` 
+
+[GitHub - tailwindlabs/prettier-plugin-tailwindcss: A Prettier plugin for Tailwind CSS that automatically sorts classes based on our recommended class order.](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
+
+修改配置
+
+```
+// .prettierrc
+{
+    // ..
+    "plugins": [
+        "prettier-plugin-svelte",
+        "prettier-plugin-tailwindcss" // MUST come last 必须放在最后
+    ]
+}
+```
+
+修改 `vscode` 配置，告诉 Prettier 扩展处理 svelte 文件（需要在 vscode 安装 prettier 插件）
+
+```json
+// settings.json
+{
+    // ..
+    "prettier.documentSelectors": ["**/*.svelte"]
+}
+```
