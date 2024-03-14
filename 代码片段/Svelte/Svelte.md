@@ -6,7 +6,7 @@
 
 [SvelteKit • Web development, streamlined](https://kit.svelte.dev/)
 
-## 生态官网
+## 相关生态官网
 
 - [SvelteLab](https://www.sveltelab.dev/)
 - [Advent of Svelte](https://advent.sveltesociety.dev/)
