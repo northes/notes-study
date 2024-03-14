@@ -1,1 +1,3 @@
 - [Fork - a fast and friendly git client for Mac and Windows](https://git-fork.com/)
+- [GitUp](https://gitup.co)
+- [GitButler | Git Branching, Refined](https://gitbutler.com)
