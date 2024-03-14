@@ -69,6 +69,8 @@ npm run build
 
 ## 格式化
 
+配置：[Prettier](../Prettier/Prettier.md)
+
 [GitHub - sveltejs/prettier-plugin-svelte: Format your svelte components using prettier.](https://github.com/sveltejs/prettier-plugin-svelte)
 
 ```bash
