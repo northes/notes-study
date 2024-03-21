@@ -204,4 +204,117 @@ let {a,b} = foo2();
 
 ```js
 // 引入模块指定方法
+import { Loading } from 'element-ui'
+```
+
+## 字符串模板引擎
+
+```js
+// 使用反引号定义字符串，其中的所有换行都会保留
+// 替换变量
+const name = '黑子'
+cosnt age = 6
+let str = `我的名字叫${name}` // 我的名字叫黑子
+let str2 = `我的\`名字\`叫${name}` // 我的`名字`叫黑子
+let str3 = `
+<div>
+	...
+</div>`.trim(); // 为了缩进美观，第一行空行，从第二行开始，再使用trim方法移除起始空行
+// 嵌入JS表达式、运算符、函数调用等
+let str4 = `我的宠物狗叫${name},今年${age*2}岁了` // ...今年12岁了
+```
+
+```js
+// 带标签的的模板字符串
+// 不常用，不学了
+let message = tag`黑子` // tag 是一个自定义模板字符串处理函数名
+```
+
+## 新增字符串方法
+
+```js
+// 字符串查找
+let msg = "Hello world!"
+
+console.log(msg.startsWith("Hello"));       // true
+console.log(msg.endsWith("!"));             // true
+console.log(msg.includes("d"));             // true
+
+
+console.log(msg.startsWith("d"));           // false
+console.log(msg.endsWith("world!"));        // true
+console.log(msg.includes("x"));             // false
+
+console.log(msg.includes("d", 8));          // true
+console.log(msg.includes("d", 11));         // false
+console.log(msg.startsWith("d", 10));       // true
+console.log(msg.startsWith("d", 9));        // false
+
+console.log(msg.endsWith("d", 11));         // true ( 长度13 - 参数值11 = 起始点2 )
+console.log(msg.endsWith("d", 8));          // false ( 长度13 - 参数值8 = 起始点5 )
+```
+
+```js
+// 字符串重复
+console.log("abc".repeat(4));       // "abcabcabcabc"
+let str = "小样儿";
+console.log(str.repeat(10));     //小样儿小样儿小样儿小样儿小样儿小样儿小样儿小样儿小样儿小样儿
+```
+
+```js
+// 填充字符串
+let str = "Iphone";
+let leftStr = "我的";
+console.log(str.padStart(str.length + leftStr.length, leftStr));//我的Iphone
+
+
+let iphone = "Iphone";    
+let rightStr = "10";    
+console.log(iphone.padEnd(iphone.length + rightStr.length, rightStr));    //Iphone10
+```
+
+## 箭头函数
+
+```js
+() => { ... } // 零个参数用 () 表示。
+
+
+x => { ... } // 一个参数可以省略 ()。
+
+
+(x, y) => { ... } // 多参数不能省略 ()。
+
+
+// 如果只有一个return，{}可以省略。
+```
+
+```js
+//  一个参数对应一个表达式
+param => expression;// 例如 x => x+2;
+
+
+// 多个参数对应一个表达式
+(param [, param]) => expression; //例如 (x,y) => (x + y);
+
+
+// 一个参数对应多个表示式
+param => {statements;} //例如 x = > { x++; return x;};
+
+
+//  多个参数对应多个表达式
+([param] [, param]) => {statements} // 例如 (x,y) => { x++;y++;return x*y;};
+
+
+//表达式里没有参数
+() => expression; //例如var flag = (() => 2)(); flag等于2
+
+
+() => {statements;} //例如 var flag = (() => {return 1;})(); flag就等于1
+
+
+ //传入一个表达式，返回一个对象
+([param]) => ({ key: value });
+//例如  var fuc = (x) => ({key:x})
+        var object = fuc(1);
+        alert(object);//{key:1}
 ```
