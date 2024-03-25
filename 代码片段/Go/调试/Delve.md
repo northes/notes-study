@@ -35,19 +35,24 @@ dlv attach
 
 ## 命令
 
-|命令|解释|示例|
-|---|---|---|
-|help|查看帮助||
-|funcs|搜索函数，可指定包名，正则表达式匹配|`funcs: test.Test*`|
-|break(b)|设置断点|`b main.main`,在 `main.main` 函数处设置断点|
-|breakpoints(bp)|查看断点信息||
-|continue(c)|继续执行，知道遇到下一个断点或结束||
-|next(c)|执行下一行,不会进入函数内部按行执行||
-|step(s)|单步执行，会进入函数内部按行执行||
-|stepout(so)|跳出当前函数||
-|restart(r)|重新运行||
-|gr|查看goroutine||
-|grs|查看所有goroutine||
+| 命令            | 解释                                 | 示例                                        |
+|:--------------- |:------------------------------------ |:------------------------------------------- |
+| help            | 查看帮助                             |                                             |
+| funcs           | 搜索函数，可指定包名，正则表达式匹配 | `funcs: test.Test*`                         |
+| break(b)        | 设置断点                             | `b main.main`,在 `main.main` 函数处设置断点 |
+| breakpoints(bp) | 查看断点信息                         |                                             |
+| continue(c)     | 继续执行，直到下一个断点或结束       |                                             |
+| next(c)         | 执行代码下一行,不会进入函数内部      |                                             |
+| step(s)         | 单步执行,会进入函数内部按行执行      |                                             |
+| stepout(so)     | 跳回到调用当前函数的地方             |                                             |
+| restart(r)      | 重新运行                             |                                             |
+| gr              | 查看goroutine                        |                                             |
+| grs             | 查看所有goroutine                    |                                             |
+| list(ls)        | 查看源代码                           | `ls main.main`、`ls main.go:17`             |
+| exit(q)         | 退出                                 |                                             |
+| clear           | 清除指定断点名或id                   | `clear 1`                                   |
+| clearall        | 清除所有断点                         |                                             |
+| locals          | 参看当前局部变量                     |                                             |
 
 
 ## 例子
