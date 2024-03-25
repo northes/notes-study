@@ -27,6 +27,10 @@ dlv debug github.com/xx/foo/bar --build-flags="-tags=xx,yy,zz"
 ```bash
 # 运行测试
 dlv test
+# 运行二进制文件
+dlv exec
+# 附加到正在运行的进程上
+dlv attach
 ```
 
 ## 命令
