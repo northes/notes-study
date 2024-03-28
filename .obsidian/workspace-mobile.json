@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "代码片段/Cron/表达式.md",
+                "file": "课程书籍文章与博客/书籍/Golang.md",
                 "mode": "preview",
                 "backlinks": false,
                 "source": true
@@ -87,7 +87,9 @@
         "state": {
           "type": "all-properties",
           "state": {
-            "sortOrder": "frequency"
+            "sortOrder": "frequency",
+            "showSearch": false,
+            "searchQuery": ""
           }
         }
       }
@@ -104,7 +106,7 @@
         "state": {
           "type": "backlink",
           "state": {
-            "file": "代码片段/Cron/表达式.md",
+            "file": "课程书籍文章与博客/书籍/Golang.md",
             "collapseAll": false,
             "extraContext": false,
             "sortOrder": "alphabetical",
@@ -121,7 +123,7 @@
         "state": {
           "type": "outgoing-link",
           "state": {
-            "file": "代码片段/Cron/表达式.md",
+            "file": "课程书籍文章与博客/书籍/Golang.md",
             "linksCollapsed": false,
             "unlinkedCollapsed": true
           }
@@ -133,7 +135,7 @@
         "state": {
           "type": "outline",
           "state": {
-            "file": "代码片段/Cron/表达式.md"
+            "file": "课程书籍文章与博客/书籍/Golang.md"
           }
         }
       },
@@ -150,6 +152,7 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "table-editor-obsidian:Advanced Tables Toolbar": false,
       "zk-prefixer:创建时间戳笔记": false,
       "switcher:打开快速切换": false,
       "graph:查看关系图谱": false,
@@ -160,6 +163,7 @@
   },
   "active": "3c95476b219edb3f",
   "lastOpenFiles": [
+    "代码片段/Cron/表达式.md",
     "代码片段/Bitwarden/Readme.md",
     "代码片段/Rust/包.md",
     "代码片段/RabbitMQ/RabbitMQ.md",
@@ -190,7 +194,6 @@
     "开发/技术选型/PT Trackers.md",
     "代码片段/PVE/assets/Pasted image 20221217184640.png",
     "代码片段/Kubernetes/快查文档.md",
-    "家庭工作站/NAS/威联通.md",
     "代码片段/Jenkins/assets/Pasted image 20230130181442.png",
     "视觉设计/assets/Pasted image 20230612212308.png",
     "代码片段/Jenkins/assets/Pasted image 20230130181538.png",
